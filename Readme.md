@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Madina Shumakhova](https://up.htmlacademy.ru/ecmascript-individual/2/user/2318109).
-* Наставник: `Неизвестно`.
+* Наставник: [Артур Галимов](https://htmlacademy.ru/profile/id1237543).
 
 ---
 

@@ -163,7 +163,7 @@ function createAddPointFormTemplate () {
               </form>`);
 }
 
-export default class PointView {
+export default class AddPointFormView {
   getTemplate() {
     return createAddPointFormTemplate();
   }

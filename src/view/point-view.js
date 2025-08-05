@@ -45,7 +45,7 @@ function createPointTemplate () {
             </li>`);
 }
 
-export default class AddPointFormView {
+export default class PointView {
   getTemplate() {
     return createPointTemplate();
   }

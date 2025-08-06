@@ -17,14 +17,16 @@ export default class Presenter {
 
   init() {
     this.points = [...this.pointsModel.getPoints()];
+    this.offer = [...this.pointsModel.getOffers()];
+    this.destinations = [...this.pointsModel.getDestinations()];
 
     render(this.filterCompanent, this.filterContainer);
     render(this.sortCompanent, this.contentContainer);
-    render(new AddPointFormView(), this.contentContainer);
-    render(new EditPointFormView(), this.contentContainer, RenderPosition.AFTERBEGIN);
+    render(new AddPointFormView({point: this.points[1], offer: this.offer, destinations: this.destinations}), this.contentContainer);
+    render(new EditPointFormView({point: this.points[0], offer: this.offer, destinations: this.destinations}), this.contentContainer, RenderPosition.AFTERBEGIN);
 
     for (let i = 0; i < this.points.length; i++) {
-      render(new PointView({point: this.points[i]}), this.contentContainer);
+      render(new PointView({point: this.points[i], offer: this.offer, destinations: this.destinations}), this.contentContainer);
     }
   }
 }

@@ -1,4 +1,4 @@
-const Descriptions = [
+const Destinations = [
   {
     id: 'cfe416cq-10xa-ye10-8077-2fs9a01edcab',
     description: 'Chamonix, is a beautiful city, a true asian pearl, with crowded streets.',
@@ -37,7 +37,7 @@ const Descriptions = [
 
   {
     id: 'cfe662cq-17xa-ye40-8077-2fs9a03edcab',
-    description: 'Krasnodar is a wonderfull city',
+    description: 'Krasnodar is a wonderfull city.',
     name: 'Krasnodar',
     pictures: [
       {
@@ -48,4 +48,4 @@ const Descriptions = [
   }
 ];
 
-export { Descriptions };
+export { Destinations };

@@ -20,7 +20,7 @@ const Points = [
     id: 'f4b62079-293f-4c3d-a702-94eec9a2808c',
     basePrice: 1100,
     dateFrom: '2020-07-10T20:55:56.845Z',
-    dateTo: '2020-08-11T11:21:13.375Z',
+    dateTo: '2020-07-11T11:21:13.375Z',
     destination: 'cfe416cq-10xa-ye10-9077-5fs9a01edcab',
     isFavorite: false,
     offers: [
@@ -34,7 +34,7 @@ const Points = [
     id: 'f4b62099-203f-4c3d-a702-96eec4a2808c',
     basePrice: 1340,
     dateFrom: '2021-08-10T22:45:56.845Z',
-    dateTo: '2021-09-11T11:23:13.375Z',
+    dateTo: '2021-08-13T11:23:13.375Z',
     destination: 'cfe416cq-10xa-ye40-8077-2fs9a03edcab',
     isFavorite: false,
     offers: [
@@ -49,7 +49,7 @@ const Points = [
     id: 'f4b62099-253f-4c3d-a712-96eec3a2800c',
     basePrice: 1086,
     dateFrom: '2021-04-10T22:45:56.845Z',
-    dateTo: '2021-05-11T11:23:13.375Z',
+    dateTo: '2021-04-11T15:10:43.375Z',
     destination: 'cfe662cq-17xa-ye40-8077-2fs9a03edcab',
     isFavorite: true,
     offers: ['b7c2e0e6-9053-51ce-b737-e581334baa81'],

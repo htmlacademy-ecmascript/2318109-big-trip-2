@@ -1,6 +1,6 @@
 import { DATE_FORMAT, EVENT_TYPES } from '../consts.js';
 import { humanizePointDueDate } from '../utils.js';
-import { createElement } from '../render';
+import AbstractView from '../framework/view/abstract-view.js';
 
 function createAddPointFormTemplate (point, offer, destinations) {
   const { dateFrom, dateTo, type, id} = point;
@@ -99,26 +99,19 @@ function createAddPointFormTemplate (point, offer, destinations) {
               </li>`);
 }
 
-export default class AddPointFormView {
+export default class AddPointFormView extends AbstractView{
+  #point = null;
+  #destinations = null;
+  #offer = null;
+
   constructor ({point, offer, destinations}) {
-    this.point = point;
-    this.offer = offer;
-    this.destinations = destinations;
+    super();
+    this.#point = point;
+    this.#offer = offer;
+    this.#destinations = destinations;
   }
 
-  getTemplate() {
-    return createAddPointFormTemplate(this.point, this.offer, this.destinations);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+  get template() {
+    return createAddPointFormTemplate(this.#point, this.#offer, this.#destinations);
   }
 }

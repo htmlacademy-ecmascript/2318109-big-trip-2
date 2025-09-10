@@ -1,5 +1,5 @@
 import { DATE_FORMAT, EVENT_TYPES } from '../consts.js';
-import { createElement } from '../render';
+import AbstractView from '../framework/view/abstract-view.js';
 import { humanizePointDueDate } from '../utils.js';
 
 function createEditPointFormTemplate (point, offer, destinations) {
@@ -90,26 +90,19 @@ function createEditPointFormTemplate (point, offer, destinations) {
             </li>`);
 }
 
-export default class EditPointFormView {
+export default class EditPointFormView extends AbstractView {
+  #point = null;
+  #destinations = null;
+  #offer = null;
+
   constructor ({point, offer, destinations}) {
-    this.point = point;
-    this.offer = offer;
-    this.destinations = destinations;
+    super();
+    this.#point = point;
+    this.#offer = offer;
+    this.#destinations = destinations;
   }
 
-  getTemplate() {
-    return createEditPointFormTemplate(this.point, this.offer, this.destinations);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+  get template() {
+    return createEditPointFormTemplate(this.#point, this.#offer, this.#destinations);
   }
 }

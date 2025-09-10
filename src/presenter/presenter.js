@@ -3,7 +3,7 @@ import SortView from '../view/sort-view.js';
 import AddPointFormView from '../view/add-point-form-view.js';
 import EditPointFormView from '../view/edit-point-form-view.js';
 import PointView from '../view/point-view.js';
-import { RenderPosition, render } from '../render.js';
+import { render, RenderPosition } from '../framework/render.js';
 
 export default class Presenter {
   filterCompanent = new FilterView();

@@ -3,7 +3,7 @@ import SortView from '../view/sort-view.js';
 import AddPointFormView from '../view/add-point-form-view.js';
 import EditPointFormView from '../view/edit-point-form-view.js';
 import PointView from '../view/point-view.js';
-import { render, RenderPosition } from '../framework/render.js';
+import { render, replace} from '../framework/render.js';
 
 export default class Presenter {
   #filterContainer = null;
@@ -31,7 +31,6 @@ export default class Presenter {
     render(this.#filterCompanent, this.#filterContainer);
     render(this.#sortCompanent, this.#contentContainer);
     render(new AddPointFormView({point: this.#points[1], offers: this.#offers, destinations: this.#destinations}), this.#contentContainer);
-    render(new EditPointFormView({point: this.#points[0], offers: this.#offers, destinations: this.#destinations}), this.#contentContainer, RenderPosition.AFTERBEGIN);
 
     for (let i = 0; i < this.#points.length; i++) {
       this.#renderPoint(this.#points[i]);
@@ -39,9 +38,47 @@ export default class Presenter {
   }
 
   #renderPoint(point) {
+    const escKeyDownHandler = (evt) => {
+      if (evt.key === 'Escape') {
+        evt.preventDefault();
+        replaceEditFormToPoint();
+        document.removeEventListener('keydown', escKeyDownHandler);
+      }
+    };
+
     const offers = this.#offers;
     const destinations = this.#destinations;
-    const pointComponent = new PointView({point, offers, destinations});
+    const pointComponent = new PointView({
+      point,
+      offers,
+      destinations,
+      onButtonClick: () => {
+        replacePointToEditForm();
+        document.addEventListener('keydown', escKeyDownHandler);
+      }
+    });
+
+    const editPointComponent = new EditPointFormView({
+      point,
+      offers,
+      destinations,
+      onFormSubmit: () => {
+        replaceEditFormToPoint();
+        document.removeEventListener('keydown', escKeyDownHandler);
+      },
+      onButtonClick: () => {
+        replaceEditFormToPoint();
+        document.removeEventListener('keydown', escKeyDownHandler);
+      }
+    });
+
+    function replacePointToEditForm() {
+      replace(editPointComponent, pointComponent);
+    }
+
+    function replaceEditFormToPoint() {
+      replace(pointComponent, editPointComponent);
+    }
 
     render(pointComponent, this.#contentContainer);
   }

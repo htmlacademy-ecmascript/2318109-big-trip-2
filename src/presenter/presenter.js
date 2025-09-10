@@ -28,13 +28,7 @@ export default class Presenter {
     this.#offers = [...this.#pointsModel.offers];
     this.#destinations = [...this.#pointsModel.destinations];
 
-    render(this.#filterCompanent, this.#filterContainer);
-    render(this.#sortCompanent, this.#contentContainer);
-    render(new AddPointFormView({point: this.#points[1], offers: this.#offers, destinations: this.#destinations}), this.#contentContainer);
-
-    for (let i = 0; i < this.#points.length; i++) {
-      this.#renderPoint(this.#points[i]);
-    }
+    this.#render();
   }
 
   #renderPoint(point) {
@@ -81,6 +75,19 @@ export default class Presenter {
     }
 
     render(pointComponent, this.#contentContainer);
+  }
+
+  #render() {
+    render(this.#filterCompanent, this.#filterContainer);
+    render(this.#sortCompanent, this.#contentContainer);
+    render(new AddPointFormView({point: this.#points[1],
+      offers: this.#offers,
+      destinations: this.#destinations
+    }),this.#contentContainer);
+
+    for (let i = 0; i < this.#points.length; i++) {
+      this.#renderPoint(this.#points[i]);
+    }
   }
 }
 

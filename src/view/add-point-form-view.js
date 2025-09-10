@@ -2,9 +2,9 @@ import { DATE_FORMAT, EVENT_TYPES } from '../consts.js';
 import { humanizePointDueDate } from '../utils.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
-function createAddPointFormTemplate (point, offer, destinations) {
+function createAddPointFormTemplate (point, offers, destinations) {
   const { dateFrom, dateTo, type, id} = point;
-  const offersType = offer.find((item) => item.type === point.type).offers;
+  const offersType = offers.find((item) => item.type === point.type).offers;
   const pointOffers = offersType.filter((offerType) => point.offers.includes(offerType.id));
   const pointDestination = destinations.find((item) => item.id === point.destination);
   return (`<li class="trip-events__item">
@@ -102,16 +102,16 @@ function createAddPointFormTemplate (point, offer, destinations) {
 export default class AddPointFormView extends AbstractView{
   #point = null;
   #destinations = null;
-  #offer = null;
+  #offers = null;
 
-  constructor ({point, offer, destinations}) {
+  constructor ({point, offers, destinations}) {
     super();
     this.#point = point;
-    this.#offer = offer;
+    this.#offers = offers;
     this.#destinations = destinations;
   }
 
   get template() {
-    return createAddPointFormTemplate(this.#point, this.#offer, this.#destinations);
+    return createAddPointFormTemplate(this.#point, this.#offers, this.#destinations);
   }
 }

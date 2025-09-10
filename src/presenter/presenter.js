@@ -11,7 +11,7 @@ export default class Presenter {
   #pointsModel = null;
 
   #points = [];
-  #offer = [];
+  #offers = [];
   #destinations = [];
 
   #filterCompanent = new FilterView();
@@ -25,16 +25,25 @@ export default class Presenter {
 
   init() {
     this.#points = [...this.#pointsModel.points];
-    this.#offer = [...this.#pointsModel.offers];
+    this.#offers = [...this.#pointsModel.offers];
     this.#destinations = [...this.#pointsModel.destinations];
 
     render(this.#filterCompanent, this.#filterContainer);
     render(this.#sortCompanent, this.#contentContainer);
-    render(new AddPointFormView({point: this.#points[1], offer: this.#offer, destinations: this.#destinations}), this.#contentContainer);
-    render(new EditPointFormView({point: this.#points[0], offer: this.#offer, destinations: this.#destinations}), this.#contentContainer, RenderPosition.AFTERBEGIN);
+    render(new AddPointFormView({point: this.#points[1], offers: this.#offers, destinations: this.#destinations}), this.#contentContainer);
+    render(new EditPointFormView({point: this.#points[0], offers: this.#offers, destinations: this.#destinations}), this.#contentContainer, RenderPosition.AFTERBEGIN);
 
     for (let i = 0; i < this.#points.length; i++) {
-      render(new PointView({point: this.#points[i], offer: this.#offer, destinations: this.#destinations}), this.#contentContainer);
+      this.#renderPoint(this.#points[i]);
     }
   }
+
+  #renderPoint(point) {
+    const offers = this.#offers;
+    const destinations = this.#destinations;
+    const pointComponent = new PointView({point, offers, destinations});
+
+    render(pointComponent, this.#contentContainer);
+  }
 }
+

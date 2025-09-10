@@ -2,9 +2,9 @@ import { DATE_FORMAT } from '../consts.js';
 import AbstractView from '../framework/view/abstract-view.js';
 import { getDurationDate, humanizePointDueDate } from '../utils.js';
 
-function createPointTemplate (point, offer, destinations) {
+function createPointTemplate (point, offers, destinations) {
   const {basePrice, dateFrom, dateTo, isFavorite, type} = point;
-  const offersType = offer.find((item) => item.type === point.type).offers;
+  const offersType = offers.find((item) => item.type === point.type).offers;
   const pointOffers = offersType.filter((offerType) => point.offers.includes(offerType.id));
   const pointDestination = destinations.find((item) => item.id === point.destination);
 
@@ -52,16 +52,16 @@ function createPointTemplate (point, offer, destinations) {
 export default class PointView extends AbstractView {
   #point = null;
   #destinations = null;
-  #offer = null;
+  #offers = null;
 
-  constructor ({point, offer, destinations}) {
+  constructor ({point, offers, destinations}) {
     super();
     this.#point = point;
-    this.#offer = offer;
+    this.#offers = offers;
     this.#destinations = destinations;
   }
 
   get template() {
-    return createPointTemplate(this.#point, this.#offer, this.#destinations);
+    return createPointTemplate(this.#point, this.#offers, this.#destinations);
   }
 }

@@ -1,6 +1,6 @@
 import { DATE_FORMAT } from '../consts.js';
 import AbstractView from '../framework/view/abstract-view.js';
-import { getDurationDate, humanizePointDueDate } from '../utils.js';
+import { getDurationDate, humanizePointDueDate } from '../utils/date-format.js';
 
 function createPointTemplate (point, offers, destinations) {
   const {basePrice, dateFrom, dateTo, isFavorite, type} = point;

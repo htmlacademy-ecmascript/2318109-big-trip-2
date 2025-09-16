@@ -1,5 +1,5 @@
 import { DATE_FORMAT, EVENT_TYPES } from '../consts.js';
-import { humanizePointDueDate } from '../utils.js';
+import { humanizePointDueDate } from '../utils/date-format.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
 function createAddPointFormTemplate (point, offers, destinations) {

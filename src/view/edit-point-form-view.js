@@ -1,6 +1,6 @@
 import { DATE_FORMAT, EVENT_TYPES } from '../consts.js';
 import AbstractView from '../framework/view/abstract-view.js';
-import { humanizePointDueDate } from '../utils.js';
+import { humanizePointDueDate } from '../utils/date-format.js';
 
 function createEditPointFormTemplate (point, offers, destinations) {
   const {basePrice, dateFrom, dateTo, type, id} = point;

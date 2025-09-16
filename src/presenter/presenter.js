@@ -4,7 +4,8 @@ import SortView from '../view/sort-view.js';
 import AddPointFormView from '../view/add-point-form-view.js';
 import EditPointFormView from '../view/edit-point-form-view.js';
 import PointView from '../view/point-view.js';
-import { render, replace} from '../framework/render.js';
+import { render, replace } from '../framework/render.js';
+import { generateFilter } from './mock/filters.js';
 
 export default class Presenter {
   #filterContainer = null;
@@ -15,7 +16,6 @@ export default class Presenter {
   #offers = [];
   #destinations = [];
 
-  #filterCompanent = new FilterView();
   #sortCompanent = new SortView();
 
   constructor({filterContainer, contentContainer, pointsModel}) {
@@ -79,7 +79,9 @@ export default class Presenter {
   }
 
   #render() {
-    render(this.#filterCompanent, this.#filterContainer);
+    const filters = generateFilter(this.#points);
+
+    render(new FilterView({filters}), this.#filterContainer);
     render(this.#sortCompanent, this.#contentContainer);
     render(new AddPointFormView({point: this.#points[1],
       offers: this.#offers,

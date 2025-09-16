@@ -44,4 +44,11 @@ const EVENT_TYPES = [
   }
 ];
 
-export { POINTS_COUNT, DATE_FORMAT, EVENT_TYPES};
+const FILTER_TYPE = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past'
+};
+
+export { POINTS_COUNT, DATE_FORMAT, EVENT_TYPES, FILTER_TYPE };

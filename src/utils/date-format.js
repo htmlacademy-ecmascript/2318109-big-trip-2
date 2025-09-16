@@ -25,4 +25,16 @@ const getDurationDate = (dateFrom, dateTo) => {
   }
 };
 
-export { humanizePointDueDate, getDurationDate };
+function isPointPast(dateFrom) {
+  return dateFrom && dayjs(dateFrom).isBefore(dayjs(), 'minute');
+}
+
+function isPointPresent(dateFrom) {
+  return dateFrom && dayjs(dateFrom).isSame(dayjs(), 'day') && dayjs(dateFrom).isAfter(dayjs().startOf('day'));
+}
+
+function isPointFuture(dateFrom) {
+  return dateFrom && dayjs(dateFrom).isAfter(dayjs(), 'minute');
+}
+
+export { humanizePointDueDate, getDurationDate, isPointFuture, isPointPresent, isPointPast };

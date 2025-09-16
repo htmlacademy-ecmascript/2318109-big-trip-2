@@ -1,3 +1,4 @@
+import NoPointView from '../view/no-point-view.js';
 import FilterView from '../view/filter-view.js';
 import SortView from '../view/sort-view.js';
 import AddPointFormView from '../view/add-point-form-view.js';
@@ -84,6 +85,11 @@ export default class Presenter {
       offers: this.#offers,
       destinations: this.#destinations
     }),this.#contentContainer);
+
+    if (this.#points.length === 0) {
+      render(new NoPointView(), this.#contentContainer);
+      return;
+    }
 
     for (let i = 0; i < this.#points.length; i++) {
       this.#renderPoint(this.#points[i]);

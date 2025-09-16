@@ -5,7 +5,7 @@ import AddPointFormView from '../view/add-point-form-view.js';
 import EditPointFormView from '../view/edit-point-form-view.js';
 import PointView from '../view/point-view.js';
 import { render, replace } from '../framework/render.js';
-import { generateFilter } from './mock/filters.js';
+import { generateFilter } from '../../mock/filters.js';
 
 export default class Presenter {
   #filterContainer = null;

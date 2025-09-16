@@ -1,5 +1,5 @@
-import { FILTER_TYPE } from '../const.js';
-import { isPointPast, isPointPresent, isPointFuture } from './utils.js';
+import { FILTER_TYPE } from '../consts.js';
+import { isPointPast, isPointPresent, isPointFuture } from './date-format.js';
 
 const filter = {
   [FILTER_TYPE.EVERYTHING]: (points) => points,

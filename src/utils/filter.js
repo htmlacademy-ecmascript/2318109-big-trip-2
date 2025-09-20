@@ -1,5 +1,17 @@
 import { FILTER_TYPE } from '../consts.js';
-import { isPointPast, isPointPresent, isPointFuture } from './date-format.js';
+import dayjs from 'dayjs';
+
+function isPointPast(dateFrom) {
+  return dateFrom && dayjs(dateFrom).isBefore(dayjs(), 'minute');
+}
+
+function isPointPresent(dateFrom) {
+  return dateFrom && dayjs(dateFrom).isBefore(dayjs(), 'minute') || dayjs(dateFrom).isSame(dayjs(), 'day') && dayjs(dateFrom).isAfter(dayjs().startOf('day'));
+}
+
+function isPointFuture(dateFrom) {
+  return dateFrom && dayjs(dateFrom).isAfter(dayjs(), 'minute');
+}
 
 const filter = {
   [FILTER_TYPE.EVERYTHING]: (points) => points,

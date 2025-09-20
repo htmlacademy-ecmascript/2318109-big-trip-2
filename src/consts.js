@@ -1,4 +1,9 @@
-const POINTS_COUNT = 3;
+const POINTS_COUNT = 4;
+
+const MODE = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
 
 const DATE_FORMAT = {
   DATE: 'YYYY-MM-DD',
@@ -51,4 +56,4 @@ const FILTER_TYPE = {
   PAST: 'past'
 };
 
-export { POINTS_COUNT, DATE_FORMAT, EVENT_TYPES, FILTER_TYPE };
+export { POINTS_COUNT, DATE_FORMAT, EVENT_TYPES, FILTER_TYPE, MODE };

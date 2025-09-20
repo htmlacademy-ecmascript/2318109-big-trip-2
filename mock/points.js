@@ -19,8 +19,8 @@ const Points = [
   {
     id: 'f4b62079-293f-4c3d-a702-94eec9a2808c',
     basePrice: 1100,
-    dateFrom: '2020-07-10T20:55:56.845Z',
-    dateTo: '2020-07-11T11:21:13.375Z',
+    dateFrom: '2026-07-10T20:55:56.845Z',
+    dateTo: '2026-07-11T11:21:13.375Z',
     destination: 'cfe416cq-10xa-ye10-9077-5fs9a01edcab',
     isFavorite: false,
     offers: [
@@ -33,8 +33,8 @@ const Points = [
   {
     id: 'f4b62099-203f-4c3d-a702-96eec4a2808c',
     basePrice: 1340,
-    dateFrom: '2021-08-10T22:45:56.845Z',
-    dateTo: '2021-08-13T11:23:13.375Z',
+    dateFrom: '2025-08-15T15:45:56.845Z',
+    dateTo: '2026-08-15T11:23:13.375Z',
     destination: 'cfe416cq-10xa-ye40-8077-2fs9a03edcab',
     isFavorite: false,
     offers: [

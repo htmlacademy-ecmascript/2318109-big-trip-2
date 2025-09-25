@@ -4,9 +4,7 @@ import { getDurationDate, humanizePointDueDate } from '../utils/date-format.js';
 
 function createPointTemplate (point, offers, destinations) {
   const {basePrice, dateFrom, dateTo, isFavorite, type} = point;
-  const offersType = offers.find((item) => item.type === point.type).offers;
-  const pointOffers = offersType.filter((offerType) => point.offers.includes(offerType.id));
-  const pointDestination = destinations.find((item) => item.id === point.destination);
+  const pointDestination = destinations.find((destination) => destination.id === point.destination);
 
   return (`<li class="trip-events__item">
               <div class="event">
@@ -27,15 +25,7 @@ function createPointTemplate (point, offers, destinations) {
                   &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
                 </p>
                 <h4 class="visually-hidden">Offers:</h4>
-                <ul class="event__selected-offers">
-                ${pointOffers.map((pointOffer) => (
-      `<li class="event__offer">
-                    <span class="event__offer-title">${pointOffer.title}</span>
-                    &plus;&euro;&nbsp;
-                    <span class="event__offer-price">${pointOffer.price}</span>
-                  </li>`
-    )).join('')}
-                </ul>
+                  ${createOffersTemplate(point, offers)}
                 <button class="event__favorite-btn ${isFavorite ? 'event__favorite-btn--active' : '' }" type="button">
                   <span class="visually-hidden">Add to favorite</span>
                   <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -47,6 +37,25 @@ function createPointTemplate (point, offers, destinations) {
                 </button>
               </div>
             </li>`);
+}
+
+function createOffersTemplate (point, offers) {
+  const offersByType = offers.find((offer) => offer.type === point.type).offers;
+  const pointOffers = offersByType.filter((offer) => point.offers.includes(offer.id));
+
+  if (!pointOffers) {
+    return '';
+  }
+
+  return (`<ul class="event__selected-offers">
+                ${pointOffers.map((pointOffer) => (
+      `<li class="event__offer">
+                    <span class="event__offer-title">${pointOffer.title}</span>
+                    &plus;&euro;&nbsp;
+                    <span class="event__offer-price">${pointOffer.price}</span>
+                  </li>`)
+    ).join('')}
+                </ul>`);
 }
 
 export default class PointView extends AbstractView {

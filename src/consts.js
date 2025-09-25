@@ -13,39 +13,39 @@ const DATE_FORMAT = {
   DATETIME: 'DD/MM/YY HH:mm'
 };
 
-const EVENT_TYPES = [
-  { eventType: 'taxi',
-    eventLabel: 'Taxi'
+const PointTypes = [
+  { pointType: 'taxi',
+    pointLabel: 'Taxi'
   },
   {
-    eventType: 'bus',
-    eventLabel: 'Bus'
+    pointType: 'bus',
+    pointLabel: 'Bus'
   },
   {
-    eventType: 'train',
-    eventLabel: 'Train'
+    pointType: 'train',
+    pointLabel: 'Train'
   },
   {
-    eventType: 'ship',
-    eventLabel: 'Ship'
+    pointType: 'ship',
+    pointLabel: 'Ship'
   },
   {
-    eventType: 'drive',
-    eventLabel: 'Drive'
+    pointType: 'drive',
+    pointLabel: 'Drive'
   },
   {
-    eventType: 'flight',
-    eventLabel: 'Flight'
+    pointType: 'flight',
+    pointLabel: 'Flight'
   },
   {
-    eventType: 'check-in',
-    eventLabel: 'Check-in'
+    pointType: 'check-in',
+    pointLabel: 'Check-in'
   },
-  { eventType: 'sightseeing',
-    eventLabel: 'Sightseeing'
+  { pointType: 'sightseeing',
+    pointLabel: 'Sightseeing'
   },
-  { eventType: 'restaurant',
-    eventLabel: 'Restaurant'
+  { pointType: 'restaurant',
+    pointLabel: 'Restaurant'
   }
 ];
 
@@ -66,4 +66,4 @@ const SORT_TYPE = {
 
 const DISABLED_SORT_TYPE = [SORT_TYPE.EVENT, SORT_TYPE.OFFERS];
 
-export { POINTS_COUNT, DATE_FORMAT, EVENT_TYPES, FILTER_TYPE, MODE, SORT_TYPE, DISABLED_SORT_TYPE };
+export { POINTS_COUNT, DATE_FORMAT, PointTypes, FILTER_TYPE, MODE, SORT_TYPE, DISABLED_SORT_TYPE };

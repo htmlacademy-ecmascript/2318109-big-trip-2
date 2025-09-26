@@ -1,6 +1,8 @@
 import { DATE_FORMAT, PointTypes } from '../consts.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { humanizePointDueDate } from '../utils/date-format.js';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 
 function createEditPointFormTemplate (point, offers, destinations, destination) {
   const {basePrice, dateFrom, dateTo, type, id} = point;

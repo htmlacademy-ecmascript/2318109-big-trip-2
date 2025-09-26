@@ -6,6 +6,7 @@ import { MODE } from '../consts.js';
 export default class PointPresenter {
   #offers = [];
   #destinations = [];
+  #destination = [];
 
   #contentContainer = null;
 
@@ -28,8 +29,9 @@ export default class PointPresenter {
 
   init(point) {
     this.#point = point;
-    this.#offers = [...this.#pointsModel.offers];
+    this.#offers = this.#pointsModel.getOffersByType(this.#point.type);
     this.#destinations = [...this.#pointsModel.destinations];
+    this.#destination = this.#pointsModel.getDestinationById(this.#point.destination);
 
     const prevPointComponent = this.#pointComponent;
     const prevEditPointComponent = this.#editPointComponent;
@@ -37,8 +39,8 @@ export default class PointPresenter {
     this.#pointComponent = new PointView({
       point: this.#point,
       offers: this.#offers,
-      destinations: this.#destinations,
-      onButtonClick: this.#buttonClickHandler,
+      destination: this.#destination,
+      onButtonClick: () => this.#replacePointToEditForm(),
       onFavoriteClick: this.#handleFavoriteClick,
     });
 
@@ -46,8 +48,10 @@ export default class PointPresenter {
       point: this.#point,
       offers: this.#offers,
       destinations: this.#destinations,
-      onButtonClick: this.#formSubmitHandler,
+      destination: this.#destination,
+      onButtonClick: () => this.#replaceEditFormToPoint(),
       onFormSubmit: this.#formSubmitHandler,
+      pointsModel: this.#pointsModel
     });
 
     if (prevPointComponent === null || prevEditPointComponent === null) {
@@ -74,6 +78,7 @@ export default class PointPresenter {
 
   resetView() {
     if (this.#mode !== MODE.DEFAULT) {
+      this.#editPointComponent.reset(this.#point);
       this.#replaceEditFormToPoint();
     }
   }
@@ -94,12 +99,9 @@ export default class PointPresenter {
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
+      this.#editPointComponent.reset(this.#point);
       this.#replaceEditFormToPoint();
     }
-  };
-
-  #buttonClickHandler = () => {
-    this.#replacePointToEditForm();
   };
 
   #handleFavoriteClick = () => {

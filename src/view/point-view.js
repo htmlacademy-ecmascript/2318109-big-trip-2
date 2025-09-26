@@ -2,9 +2,9 @@ import { DATE_FORMAT } from '../consts.js';
 import AbstractView from '../framework/view/abstract-view.js';
 import { getDurationDate, humanizePointDueDate } from '../utils/date-format.js';
 
-function createPointTemplate (point, offers, destinations) {
+function createPointTemplate (point, offers, destination) {
   const {basePrice, dateFrom, dateTo, isFavorite, type} = point;
-  const pointDestination = destinations.find((destination) => destination.id === point.destination);
+
 
   return (`<li class="trip-events__item">
               <div class="event">
@@ -12,7 +12,7 @@ function createPointTemplate (point, offers, destinations) {
                 <div class="event__type">
                   <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
                 </div>
-                <h3 class="event__title">${type} ${pointDestination.name}</h3>
+                <h3 class="event__title">${type} ${destination.name}</h3>
                 <div class="event__schedule">
                   <p class="event__time">
                     <time class="event__start-time" datetime="${humanizePointDueDate(dateFrom, DATE_FORMAT.FULL_DATETIME)}">${humanizePointDueDate(dateFrom, DATE_FORMAT.TIME)}</time>
@@ -25,7 +25,7 @@ function createPointTemplate (point, offers, destinations) {
                   &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
                 </p>
                 <h4 class="visually-hidden">Offers:</h4>
-                  ${createOffersTemplate(point, offers)}
+                  ${createOffersTemplate(offers)}
                 <button class="event__favorite-btn ${isFavorite ? 'event__favorite-btn--active' : '' }" type="button">
                   <span class="visually-hidden">Add to favorite</span>
                   <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -39,16 +39,13 @@ function createPointTemplate (point, offers, destinations) {
             </li>`);
 }
 
-function createOffersTemplate (point, offers) {
-  const offersByType = offers.find((offer) => offer.type === point.type).offers;
-  const pointOffers = offersByType.filter((offer) => point.offers.includes(offer.id));
-
-  if (!pointOffers) {
+function createOffersTemplate (offersList) {
+  if (!offersList) {
     return '';
   }
 
   return (`<ul class="event__selected-offers">
-                ${pointOffers.map((pointOffer) => (
+                ${offersList.offers.map((pointOffer) => (
       `<li class="event__offer">
                     <span class="event__offer-title">${pointOffer.title}</span>
                     &plus;&euro;&nbsp;
@@ -60,16 +57,16 @@ function createOffersTemplate (point, offers) {
 
 export default class PointView extends AbstractView {
   #point = null;
-  #destinations = null;
+  #destination = null;
   #offers = null;
   #onButtonClick = null;
   #handleFavoriteClick = null;
 
-  constructor ({point, offers, destinations, onButtonClick, onFavoriteClick}) {
+  constructor ({point, offers, destination, onButtonClick, onFavoriteClick}) {
     super();
     this.#point = point;
     this.#offers = offers;
-    this.#destinations = destinations;
+    this.#destination = destination;
     this.#onButtonClick = onButtonClick;
     this.#handleFavoriteClick = onFavoriteClick;
 
@@ -78,7 +75,7 @@ export default class PointView extends AbstractView {
   }
 
   get template() {
-    return createPointTemplate(this.#point, this.#offers, this.#destinations);
+    return createPointTemplate(this.#point, this.#offers, this.#destination);
   }
 
   #buttonClickHandler = (evt) => {

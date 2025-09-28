@@ -1,4 +1,4 @@
-import { FILTER_TYPE } from '../consts.js';
+import { FilterType } from '../consts.js';
 import dayjs from 'dayjs';
 
 function isPointPast(dateFrom) {
@@ -14,10 +14,10 @@ function isPointFuture(dateFrom) {
 }
 
 const filter = {
-  [FILTER_TYPE.EVERYTHING]: (points) => points,
-  [FILTER_TYPE.PAST]: (points) => points.filter((point) => isPointPast(point.dateFrom)),
-  [FILTER_TYPE.PRESENT]: (points) => points.filter((point) => isPointPresent(point.dateFrom)),
-  [FILTER_TYPE.FUTURE]: (points) => points.filter((point) => isPointFuture(point.dateFrom)),
+  [FilterType.EVERYTHING]: (points) => points,
+  [FilterType.PAST]: (points) => points.filter((point) => isPointPast(point.dateFrom)),
+  [FilterType.PRESENT]: (points) => points.filter((point) => isPointPresent(point.dateFrom)),
+  [FilterType.FUTURE]: (points) => points.filter((point) => isPointFuture(point.dateFrom)),
 };
 
 export { filter };

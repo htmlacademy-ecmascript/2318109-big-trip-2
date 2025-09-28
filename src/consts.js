@@ -49,7 +49,7 @@ const PointTypes = [
   }
 ];
 
-const FILTER_TYPE = {
+const FilterType = {
   EVERYTHING: 'everything',
   FUTURE: 'future',
   PRESENT: 'present',
@@ -78,4 +78,4 @@ const UpdateType = {
 
 const DISABLED_SORT_TYPE = [SortType.EVENT, SortType.OFFERS];
 
-export { POINTS_COUNT, DATE_FORMAT, PointTypes, FILTER_TYPE, MODE, SortType, DISABLED_SORT_TYPE, UserAction, UpdateType};
+export { POINTS_COUNT, DATE_FORMAT, PointTypes, FilterType, MODE, SortType, DISABLED_SORT_TYPE, UserAction, UpdateType};

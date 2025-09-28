@@ -2,9 +2,10 @@ import NoPointView from '../view/no-point-view.js';
 import FilterView from '../view/filter-view.js';
 import SortView from '../view/sort-view.js';
 import PointPresenter from './point-presenter.js';
+import EventListView from '../view/event-list-view.js';
 import { sortByPrice, sortByTime } from '../utils/sort.js';
-import { SortType } from '../consts.js';
-import { render } from '../framework/render.js';
+import { SortType, UserAction, UpdateType } from '../consts.js';
+import { render, remove, RenderPosition } from '../framework/render.js';
 import { generateFilter } from '../../mock/filters.js';
 
 export default class Presenter {
@@ -13,8 +14,9 @@ export default class Presenter {
 
   #pointsModel = null;
 
+  #eventListComponent = new EventListView();
   #noPointComponent = new NoPointView();
-  #sortCompanent = null;
+  #sortComponent = null;
 
   #pointPresenters = new Map();
 
@@ -52,19 +54,33 @@ export default class Presenter {
   };
 
   #handleViewAction = (actionType, updateType, update) => {
-    console.log(actionType, updateType, update);
-    // Здесь будем вызывать обновление модели.
-    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
-    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
-    // update - обновленные данные
+    switch (actionType) {
+      case UserAction.UPDATE_POINT:
+        this.#pointsModel.updatePoint(updateType, update);
+        break;
+      case UserAction.ADD_POINT:
+        this.#pointsModel.addPoint(updateType, update);
+        break;
+      case UserAction.DELETE_POINT:
+        this.#pointsModel.deletePoint(updateType, update);
+        break;
+    }
   };
 
   #handleModelEvent = (updateType, data) => {
-    console.log(updateType, data);
-    // В зависимости от типа изменений решаем, что делать:
-    // - обновить часть списка (например, когда поменялось описание)
-    // - обновить список (например, когда задача ушла в архив)
-    // - обновить всю доску (например, при переключении фильтра)
+    switch (updateType) {
+      case UpdateType.PATCH:
+        this.#pointPresenters.get(data.id).init(data);
+        break;
+      case UpdateType.MINOR:
+        this.#clear();
+        this.#render();
+        break;
+      case UpdateType.MAJOR:
+        this.#clear(/*{ resetSortType: true }*/);
+        this.#render();
+        break;
+    }
   };
 
   #handleSortTypeChange = (sortType) => {
@@ -73,17 +89,17 @@ export default class Presenter {
     }
 
     this.#currentSortType = sortType;
-    this.#clearPresenter();
-    this.#renderPoints();
+    this.#clear();
+    this.#render();
   };
 
   #renderSort() {
-    this.#sortCompanent = new SortView({
+    this.#sortComponent = new SortView({
       onSortTypeChange: this.#handleSortTypeChange,
       currentSortType: this.#currentSortType
     });
 
-    render(this.#sortCompanent, this.#contentContainer);
+    render(this.#sortComponent, this.#eventListComponent.element, RenderPosition.AFTERBEGIN);
   }
 
   #renderFilters() {
@@ -93,7 +109,7 @@ export default class Presenter {
 
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
-      contentContainer: this.#contentContainer,
+      contentContainer: this.#eventListComponent.element,
       pointsModel: this.#pointsModel,
       onDataChange: this.#handleViewAction,
       onModeChange: this.#handleModeChange
@@ -104,27 +120,38 @@ export default class Presenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  #renderPoints() {
-    this.points.forEach((point) => this.#renderPoint(point));
+  #renderPoints(points) {
+    points.forEach((point) => this.#renderPoint(point));
   }
 
   #renderNoPoints() {
-    render(this.#noPointComponent, this.#contentContainer);
+    render(this.#noPointComponent, this.#eventListComponent.element);
   }
 
-  #clearPresenter() {
+  #clear({resetSortType = false} = {}) {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
+
+    remove(this.#sortComponent);
+    remove(this.#noPointComponent);
+
+    if (resetSortType) {
+      this.#currentSortType = SortType.DAY;
+    }
   }
 
   #render() {
-    if (this.points.length === 0) {
+    const points = this.points;
+    const pointCount = points.length;
+
+    if (pointCount === 0) {
       this.#renderNoPoints();
       return;
     }
 
     this.#renderSort();
-    this.#renderPoints();
-    this.#renderFilters();
+    render(this.#eventListComponent, this.#contentContainer);
+    this.#renderPoints(points.slice(0, pointCount));
+    // this.#renderFilters();
   }
 }

@@ -76,6 +76,13 @@ const UpdateType = {
   MAJOR: 'MAJOR',
 };
 
+const NoPointsMessagesType = {
+  [FilterType.EVERYTHING]: 'Click New Event to create your first point',
+  [FilterType.PAST]: 'There are no past events now',
+  [FilterType.PRESENT]: 'There are no present events now',
+  [FilterType.FUTURE]: 'There are no future events now',
+};
+
 const DISABLED_SORT_TYPE = [SortType.EVENT, SortType.OFFERS];
 
-export { POINTS_COUNT, DATE_FORMAT, PointTypes, FilterType, MODE, SortType, DISABLED_SORT_TYPE, UserAction, UpdateType};
+export { POINTS_COUNT, DATE_FORMAT, PointTypes, FilterType, MODE, SortType, DISABLED_SORT_TYPE, UserAction, UpdateType, NoPointsMessagesType };

@@ -106,7 +106,7 @@ function createDestinationTemplate (destination) {
 
 function createOffersTemplate (point, offersList) {
   return (`
-    ${offersList.length !== 0 ? `
+    ${offersList.offers.length !== 0 ? `
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
       <div class="event__available-offers">
         ${offersList.offers.map(({id, title, price}) =>

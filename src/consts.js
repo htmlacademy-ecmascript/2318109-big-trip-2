@@ -64,6 +64,18 @@ const SortType = {
   OFFERS: 'offers'
 };
 
+const UserAction = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT',
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
 const DISABLED_SORT_TYPE = [SortType.EVENT, SortType.OFFERS];
 
-export { POINTS_COUNT, DATE_FORMAT, PointTypes, FILTER_TYPE, MODE, SortType, DISABLED_SORT_TYPE };
+export { POINTS_COUNT, DATE_FORMAT, PointTypes, FILTER_TYPE, MODE, SortType, DISABLED_SORT_TYPE, UserAction, UpdateType};

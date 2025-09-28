@@ -2,8 +2,9 @@ import { POINTS_COUNT } from '../consts.js';
 import { getRandomPoint } from '../../mock/points.js';
 import { Destinations } from '../../mock/destinations.js';
 import { Offers } from '../../mock/offers';
+import Observable from '../framework/observable.js';
 
-export default class PointsModel {
+export default class PointsModel extends Observable {
   #points = this.generateUniquePoints();
   #destinations = Destinations;
   #offers = Offers;

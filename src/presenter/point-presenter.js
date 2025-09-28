@@ -3,6 +3,7 @@ import PointView from '../view/point-view.js';
 import { render, replace, remove } from '../framework/render.js';
 import { MODE } from '../consts.js';
 import { UserAction, UpdateType } from '../consts.js';
+import { isDatesEqual} from '../utils/common.js';
 
 export default class PointPresenter {
   #offers = [];
@@ -52,6 +53,7 @@ export default class PointPresenter {
       destination: this.#destination,
       onButtonClick: () => this.#replaceEditFormToPoint(),
       onFormSubmit: this.#formSubmitHandler,
+      onDeleteClick: this.#handleDeleteClick,
       pointsModel: this.#pointsModel
     });
 
@@ -109,17 +111,29 @@ export default class PointPresenter {
     this.#handleDataChange(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,
-      {...this.#point, isFavorite: !this.#point.isFavorite},
+      {...this.#point, isFavorite: !this.#point.isFavorite}
     );
   };
 
-  #formSubmitHandler = (point) => {
+  #formSubmitHandler = (update) => {
+    const isMinorUpdate =
+      !isDatesEqual(this.#point.dateFrom, update.dateFrom) ||
+      !isDatesEqual(this.#point.dateTo, update.dateTo);
+
     this.#handleDataChange(
       UserAction.UPDATE_POINT,
-      UpdateType.MINOR,
-      point,
+      isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+      update
     );
+
     this.#replaceEditFormToPoint();
   };
-}
 
+  #handleDeleteClick = (point) => {
+    this.#handleDataChange(
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
+      point
+    );
+  };
+}

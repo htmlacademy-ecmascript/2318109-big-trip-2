@@ -56,7 +56,7 @@ const FILTER_TYPE = {
   PAST: 'past'
 };
 
-const SORT_TYPE = {
+const SortType = {
   DAY: 'day',
   EVENT: 'event',
   TIME: 'time',
@@ -64,6 +64,6 @@ const SORT_TYPE = {
   OFFERS: 'offers'
 };
 
-const DISABLED_SORT_TYPE = [SORT_TYPE.EVENT, SORT_TYPE.OFFERS];
+const DISABLED_SORT_TYPE = [SortType.EVENT, SortType.OFFERS];
 
-export { POINTS_COUNT, DATE_FORMAT, PointTypes, FILTER_TYPE, MODE, SORT_TYPE, DISABLED_SORT_TYPE };
+export { POINTS_COUNT, DATE_FORMAT, PointTypes, FILTER_TYPE, MODE, SortType, DISABLED_SORT_TYPE };

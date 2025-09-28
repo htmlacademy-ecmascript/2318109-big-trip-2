@@ -27,10 +27,6 @@ export default class PointPresenter {
     this.#handleModeChange = onModeChange;
   }
 
-  get points() {
-    return this.#pointsModel.points;
-  }
-
   init(point) {
     this.#point = point;
     this.#offers = this.#pointsModel.getOffersByType(this.#point.type);

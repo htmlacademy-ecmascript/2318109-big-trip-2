@@ -2,9 +2,8 @@ import NoPointView from '../view/no-point-view.js';
 import FilterView from '../view/filter-view.js';
 import SortView from '../view/sort-view.js';
 import PointPresenter from './point-presenter.js';
-import { updateItem } from '../utils/common.js';
 import { sortByPrice, sortByTime } from '../utils/sort.js';
-import { SORT_TYPE } from '../consts.js';
+import { SortType } from '../consts.js';
 import { render } from '../framework/render.js';
 import { generateFilter } from '../../mock/filters.js';
 
@@ -14,15 +13,12 @@ export default class Presenter {
 
   #pointsModel = null;
 
-  #points = [];
-  #sourcedPoints = [];
-
   #noPointComponent = new NoPointView();
   #sortCompanent = null;
 
   #pointPresenters = new Map();
 
-  #currentSortType = SORT_TYPE.DAY;
+  #currentSortType = SortType.DAY;
 
   constructor({filterContainer, contentContainer, pointsModel}) {
     this.#filterContainer = filterContainer;
@@ -30,10 +26,22 @@ export default class Presenter {
     this.#pointsModel = pointsModel;
   }
 
-  init() {
-    this.#points = [...this.#pointsModel.points];
-    this.#sourcedPoints = [...this.#pointsModel.points];
+  get points() {
+    switch (this.#currentSortType) {
+      // case SortType.DAY:
+      //   return [...this.#pointsModel.points].sort(sortByDay);
+      case SortType.DAY:
+        return [...this.#pointsModel.points];
+      case SortType.TIME:
+        return [...this.#pointsModel.points].sort(sortByTime);
+      case SortType.PRICE:
+        return [...this.#pointsModel.points].sort(sortByPrice);
+    }
 
+    return this.#pointsModel.points;
+  }
+
+  init() {
     this.#render();
   }
 
@@ -42,33 +50,18 @@ export default class Presenter {
   };
 
   #handlePointChange = (updatedPoint) => {
-    this.#points = updateItem(this.#points, updatedPoint);
-    this.#sourcedPoints = updateItem(this.#sourcedPoints, updatedPoint);
+    //
+
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
   };
 
-  #sortPoints(sortType) {
-    switch (sortType) {
-      case SORT_TYPE.TIME:
-        this.#points.sort(sortByTime);
-        break;
-      case SORT_TYPE.PRICE:
-        this.#points.sort(sortByPrice);
-        break;
-      case SORT_TYPE.DAY:
-        this.#points = [...this.#sourcedPoints];
-        break;
-    }
-
-    this.#currentSortType = sortType;
-  }
 
   #handleSortTypeChange = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
     }
 
-    this.#sortPoints(sortType);
+    this.#currentSortType = sortType;
     this.#clearPresenter();
     this.#renderPoints();
   };
@@ -83,7 +76,7 @@ export default class Presenter {
   }
 
   #renderFilters() {
-    const filters = generateFilter(this.#points);
+    const filters = generateFilter(this.points);
     render(new FilterView({filters}), this.#filterContainer);
   }
 
@@ -100,10 +93,8 @@ export default class Presenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  #renderPoints(from, to) {
-    this.#points
-      .slice(from, to)
-      .forEach((point) => this.#renderPoint(point));
+  #renderPoints() {
+    this.points.forEach((point) => this.#renderPoint(point));
   }
 
   #renderNoPoints() {
@@ -116,7 +107,7 @@ export default class Presenter {
   }
 
   #render() {
-    if (this.#points.length === 0) {
+    if (this.points.length === 0) {
       this.#renderNoPoints();
       return;
     }
@@ -126,4 +117,3 @@ export default class Presenter {
     this.#renderFilters();
   }
 }
-

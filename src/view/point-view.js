@@ -4,6 +4,8 @@ import { getDurationDate, humanizePointDueDate } from '../utils/date-format.js';
 
 function createPointTemplate (point, offers, destination) {
   const {basePrice, dateFrom, dateTo, isFavorite, type} = point;
+  const selectedOffers = offers.offers.filter((offer) =>
+    point.offers.includes(offer.id));
 
 
   return (`
@@ -26,7 +28,7 @@ function createPointTemplate (point, offers, destination) {
           &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
         </p>
         <h4 class="visually-hidden">Offers:</h4>
-          ${createOffersTemplate(offers)}
+          ${createOffersTemplate(selectedOffers)}
         <button class="event__favorite-btn ${isFavorite ? 'event__favorite-btn--active' : '' }" type="button">
           <span class="visually-hidden">Add to favorite</span>
           <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -41,17 +43,17 @@ function createPointTemplate (point, offers, destination) {
   `);
 }
 
-function createOffersTemplate (offersList) {
-  if (!offersList) {
+function createOffersTemplate (selectedOffers) {
+  if (!selectedOffers) {
     return '';
   }
 
   return (`<ul class="event__selected-offers">
-                ${offersList.offers.map((pointOffer) => (
+                ${selectedOffers.map((selectedOffer) => (
       `<li class="event__offer">
-                    <span class="event__offer-title">${pointOffer.title}</span>
+                    <span class="event__offer-title">${selectedOffer.title}</span>
                     &plus;&euro;&nbsp;
-                    <span class="event__offer-price">${pointOffer.price}</span>
+                    <span class="event__offer-price">${selectedOffer.price}</span>
                   </li>`)
     ).join('')}
                 </ul>`);

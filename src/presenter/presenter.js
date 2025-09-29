@@ -82,7 +82,7 @@ export default class Presenter {
         this.#render();
         break;
       case UpdateType.MAJOR:
-        this.#clear(/*{ resetSortType: true }*/);
+        this.#clear({ resetSortType: true });
         this.#render();
         break;
     }

@@ -42,7 +42,7 @@ export default class PointPresenter {
       point: this.#point,
       offers: this.#offers,
       destination: this.#destination,
-      onButtonClick: () => this.#replacePointToEditForm(),
+      onButtonClick: this.#buttonClickHandler,
       onFavoriteClick: this.#favoriteClickHandler,
     });
 
@@ -51,7 +51,7 @@ export default class PointPresenter {
       offers: this.#offers,
       destinations: this.#destinations,
       destination: this.#destination,
-      onButtonClick: () => this.#replaceEditFormToPoint(),
+      onButtonClick: this.#buttonClickHandler,
       onFormSubmit: this.#formSubmitHandler,
       onDeleteClick: this.#deleteClickHandler,
       pointsModel: this.#pointsModel
@@ -105,6 +105,16 @@ export default class PointPresenter {
       this.#editPointComponent.reset(this.#point);
       this.#replaceEditFormToPoint();
     }
+  };
+
+  #buttonClickHandler = (isClose = false) => {
+    if(isClose) {
+      this.#editPointComponent.reset(this.#point);
+      this.#replaceEditFormToPoint();
+      return;
+    }
+
+    this.#replacePointToEditForm();
   };
 
   #favoriteClickHandler = () => {

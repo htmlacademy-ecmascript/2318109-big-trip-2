@@ -1,5 +1,5 @@
 import FilterPresenter from './presenter/filter-presenter.js';
-import HeaderPresenter from './presenter/header-presenter.js';
+import NewPointBtnPresenter from './presenter/new-point-btn-presenter.js';
 import Presenter from './presenter/presenter.js';
 import PointsModel from './model/model.js';
 import FilterModel from './model/filter-model.js';
@@ -25,11 +25,11 @@ const init = () => {
     filterModel
   });
 
-  const headerPresenter = new HeaderPresenter({
+  const newPointBtnPresenter = new NewPointBtnPresenter({
     tripMainContainer: tripMainContainer,
   });
 
-  headerPresenter.init();
+  newPointBtnPresenter.init();
   filterPresenter.init();
   pointPresenter.init();
 };

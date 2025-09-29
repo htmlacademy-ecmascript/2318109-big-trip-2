@@ -55,6 +55,17 @@ const Points = [
     offers: ['b7c2e0e6-9053-51ce-b737-e581334baa81'],
     type: 'train'
   },
+
+  {
+    id: 'f4b62003-273f-4c3d-a712-91eec3a2800c',
+    basePrice: 1086,
+    dateFrom: '2026-04-10T22:45:56.845Z',
+    dateTo: '2026-04-11T15:10:43.375Z',
+    destination: 'cfe662cq-17xa-ye40-8077-2fs9a03edcab',
+    isFavorite: true,
+    offers: ['b9c3e4e6-9953-62ce-b547-e582314baa34'],
+    type: 'flight'
+  },
 ];
 
 const getRandomPoint = () => getRandomArrayElement(Points);

@@ -1,5 +1,3 @@
-const POINTS_COUNT = 4;
-
 const MODE = {
   DEFAULT: 'DEFAULT',
   EDITING: 'EDITING',
@@ -74,6 +72,7 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
 const NoPointsMessagesType = {
@@ -101,4 +100,4 @@ const DEFAULT_POINT = ({
 
 const DISABLED_SORT_TYPE = [SortType.EVENT, SortType.OFFERS];
 
-export { POINTS_COUNT, DEFAULT_POINT, DATE_FORMAT, PointTypes, EditType, FilterType, MODE, SortType, DISABLED_SORT_TYPE, UserAction, UpdateType, NoPointsMessagesType };
+export { DEFAULT_POINT, DATE_FORMAT, PointTypes, EditType, FilterType, MODE, SortType, DISABLED_SORT_TYPE, UserAction, UpdateType, NoPointsMessagesType };

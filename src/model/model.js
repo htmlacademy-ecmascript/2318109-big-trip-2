@@ -5,9 +5,19 @@ import { Offers } from '../../mock/offers';
 import Observable from '../framework/observable.js';
 
 export default class PointsModel extends Observable {
+  #pointsApiService = null;
   #points = this.generateUniquePoints();
   #destinations = Destinations;
   #offers = Offers;
+
+  constructor({pointsApiService}) {
+    super();
+    this.#pointsApiService = pointsApiService;
+
+    this.#pointsApiService.points.then((points) => {
+
+    });
+  }
 
   generateUniquePoints() {
     const uniqueIds = new Set();

@@ -3,13 +3,19 @@ import NewPointBtnPresenter from './presenter/new-point-btn-presenter.js';
 import Presenter from './presenter/presenter.js';
 import PointsModel from './model/model.js';
 import FilterModel from './model/filter-model.js';
+import PointsApiService from './points-api-service.js';
+
+const AUTHORIZATION = 'Basic ivtai117ahtwbnp121';
+const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
 
 const init = () => {
   const filterContainer = document.querySelector('.trip-controls__filters');
   const contentContainer = document.querySelector('.trip-events');
   const tripMainContainer = document.querySelector('.trip-main');
 
-  const pointsModel = new PointsModel();
+  const pointsModel = new PointsModel({
+    pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
+  });
   const filterModel = new FilterModel();
 
   const newPointBtnPresenter = new NewPointBtnPresenter({

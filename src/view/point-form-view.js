@@ -1,13 +1,20 @@
-import { DATE_FORMAT, PointTypes } from '../consts.js';
+import { DATE_FORMAT, PointTypes, EditType } from '../consts.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { humanizePointDueDate } from '../utils/date-format.js';
 import he from 'he';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
-function createEditPointFormTemplate (state, offersbyType, destinations, destination) {
+function createEditPointFormTemplate (state, offersbyType, destinations, destination, formType) {
   const { dateFrom, dateTo, selectedOffers, type, basePrice} = state;
   const offersList = offersbyType.offers;
+  const isCreating = formType === EditType.CREATING;
+
+  const rollUpBtnTemplate = () => `
+  <button class="event__rollup-btn" type="button">
+    <span class="visually-hidden">Open event</span>
+  </button>
+  `;
 
   return (`
     <li class="trip-events__item">
@@ -32,7 +39,7 @@ function createEditPointFormTemplate (state, offersbyType, destinations, destina
                   <label class="event__label  event__type-output" for="event-destination-1">
                     ${type}
                   </label>
-                  <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(destination.name)}" list="destination-list-1" required>
+                  <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination ? he.encode(destination.name) : ''}" list="destination-list-1" required>
                   ${createDestinationsListTemplate(destinations)}
                 </div>
 
@@ -53,8 +60,8 @@ function createEditPointFormTemplate (state, offersbyType, destinations, destina
                 </div>
 
                 <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-                <button class="event__reset-btn" type="reset">Delete</button>
-                <button class="event__rollup-btn" type="button">
+                <button class="event__reset-btn" type="reset">${isCreating ? 'Cancel' : 'Delete'}</button>
+                ${isCreating ? '' : rollUpBtnTemplate()}
                   <span class="visually-hidden">Open event</span>
                 </button>
               </header>
@@ -93,6 +100,10 @@ function createPointTypeTemplate (currentType) {
 }
 
 function createDestinationTemplate (destination) {
+  if (!destination) {
+    return '';
+  }
+
   return (`
     ${destination.description ? `
     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -138,8 +149,10 @@ export default class PointFormView extends AbstractStatefulView {
   #onFormSubmit = null;
   #pointsModel = null;
   #handleDeleteClick = null;
+  #handleCancelClick = null;
+  #editType = EditType.EDITING;
 
-  constructor ({point, offers, destinations, destination, onButtonClick, onFormSubmit, pointsModel, onDeleteClick}) {
+  constructor ({point, offers, destinations, destination, onButtonClick, onCancelClick, onFormSubmit, pointsModel, onDeleteClick, type = EditType.EDITING}) {
     super();
     this._setState(PointFormView.parsePointToState(point));
     this.#offers = offers;
@@ -149,12 +162,14 @@ export default class PointFormView extends AbstractStatefulView {
     this.#onFormSubmit = onFormSubmit;
     this.#pointsModel = pointsModel;
     this.#handleDeleteClick = onDeleteClick;
+    this.#handleCancelClick = onCancelClick;
+    this.#editType = type;
 
     this._restoreHandlers();
   }
 
   get template() {
-    return createEditPointFormTemplate(this._state, this.#offers, this.#destinations, this.#destination);
+    return createEditPointFormTemplate(this._state, this.#offers, this.#destinations, this.#destination, this.#editType);
   }
 
   removeElement() {
@@ -179,10 +194,18 @@ export default class PointFormView extends AbstractStatefulView {
     this.element.querySelector('.event__input--price').addEventListener('change', this.#priceInputHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#changeTypeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationInputHandler);
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#buttonClickHandler);
     this.element.querySelector('.event--edit').addEventListener('submit', this.#formSubmitHandler);
-    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
     this.element.querySelector('.event__available-offers').addEventListener('change', this.#offerChangeHandler);
+
+    if(this.#editType === EditType.EDITING) {
+      this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#buttonClickHandler);
+
+      this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
+    }
+    if(this.#editType === EditType.CREATING) {
+      this.element.querySelector('.event__reset-btn').addEventListener('click', this.#cancelBtnClickHandler);
+    }
+
 
     this.#setDatepickers();
   }
@@ -283,6 +306,11 @@ export default class PointFormView extends AbstractStatefulView {
         destination: newDestination.id
       });
     }
+  };
+
+  #cancelBtnClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleCancelClick();
   };
 
   #buttonClickHandler = (evt) => {

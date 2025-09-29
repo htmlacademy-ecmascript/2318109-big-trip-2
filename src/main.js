@@ -12,6 +12,10 @@ const init = () => {
   const pointsModel = new PointsModel();
   const filterModel = new FilterModel();
 
+  const newPointBtnPresenter = new NewPointBtnPresenter({
+    tripMainContainer: tripMainContainer
+  });
+
   const filterPresenter = new FilterPresenter({
     filterContainer: filterContainer,
     filterModel,
@@ -22,14 +26,11 @@ const init = () => {
     contentContainer: contentContainer,
     tripMainContainer: tripMainContainer,
     pointsModel,
-    filterModel
+    filterModel,
+    newPointBtnPresenter
   });
 
-  const newPointBtnPresenter = new NewPointBtnPresenter({
-    tripMainContainer: tripMainContainer,
-  });
-
-  newPointBtnPresenter.init();
+  newPointBtnPresenter.init({onButtonClick: pointPresenter.newPointButtonClickHandler});
   filterPresenter.init();
   pointPresenter.init();
 };

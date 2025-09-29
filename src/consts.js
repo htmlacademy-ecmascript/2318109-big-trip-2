@@ -83,6 +83,11 @@ const NoPointsMessagesType = {
   [FilterType.FUTURE]: 'There are no future events now',
 };
 
+const EditType = {
+  EDITING: 'EDITING',
+  CREATING: 'CREATING',
+};
+
 const DEFAULT_POINT = ({
   basePrice: '0',
   dateFrom: null,
@@ -96,4 +101,4 @@ const DEFAULT_POINT = ({
 
 const DISABLED_SORT_TYPE = [SortType.EVENT, SortType.OFFERS];
 
-export { POINTS_COUNT, DEFAULT_POINT, DATE_FORMAT, PointTypes, FilterType, MODE, SortType, DISABLED_SORT_TYPE, UserAction, UpdateType, NoPointsMessagesType };
+export { POINTS_COUNT, DEFAULT_POINT, DATE_FORMAT, PointTypes, EditType, FilterType, MODE, SortType, DISABLED_SORT_TYPE, UserAction, UpdateType, NoPointsMessagesType };

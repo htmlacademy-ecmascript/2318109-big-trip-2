@@ -1,54 +1,32 @@
-import { POINTS_COUNT } from '../consts.js';
-import { getRandomPoint } from '../../mock/points.js';
-import { Destinations } from '../../mock/destinations.js';
-import { Offers } from '../../mock/offers';
 import Observable from '../framework/observable.js';
 
 export default class PointsModel extends Observable {
   #pointsApiService = null;
-  #points = this.generateUniquePoints();
-  #destinations = Destinations;
-  #offers = Offers;
+  #points = [];
+  #destinations = [];
+  #offers = [];
 
   constructor({pointsApiService}) {
     super();
     this.#pointsApiService = pointsApiService;
-
-    this.#pointsApiService.points.then((points) => {
-
-    });
   }
 
-  #adaptToClient(point) {
-    const adaptedPoint = {
-      ...point,
-      dateFrom: point['date_from'] !== null ? new Date(point['date_from']) : point['date_from'],
-      dateTo: point['date_to'] !== null ? new Date(point['date_to']) : point['date_to'],
-      basePrice: point['base_price'],
-      isFavorite: point['is_favorite'],
-    };
+  async init() {
+    try {
+      const [points, destinations, offers] = await Promise.all([
+        this.#pointsApiService.points,
+        this.#pointsApiService.destinations,
+        this.#pointsApiService.offers
+      ]);
 
-    delete adaptedPoint['date_from'];
-    delete adaptedPoint['date_to'];
-    delete adaptedPoint['base_price'];
-    delete adaptedPoint['is_favorite'];
-
-    return adaptedPoint;
-  }
-
-  generateUniquePoints() {
-    const uniqueIds = new Set();
-    const points = [];
-
-    while (points.length < POINTS_COUNT) {
-      const mockPoint = getRandomPoint();
-      if (!uniqueIds.has(mockPoint.id)) {
-        uniqueIds.add(mockPoint.id);
-        points.push(mockPoint);
-      }
+      this.#points = points.map(this.#adaptToClient);
+      this.#destinations = destinations;
+      this.#offers = offers;
+    } catch (err) {
+      this.#points = [];
+      this.#destinations = [];
+      this.#offers = [];
     }
-
-    return points;
   }
 
   get points() {
@@ -111,4 +89,20 @@ export default class PointsModel extends Observable {
     this._notify(updateType);
   }
 
+  #adaptToClient(point) {
+    const adaptedPoint = {
+      ...point,
+      dateFrom: point['date_from'] !== null ? new Date(point['date_from']) : point['date_from'],
+      dateTo: point['date_to'] !== null ? new Date(point['date_to']) : point['date_to'],
+      basePrice: point['base_price'],
+      isFavorite: point['is_favorite'],
+    };
+
+    delete adaptedPoint['date_from'];
+    delete adaptedPoint['date_to'];
+    delete adaptedPoint['base_price'];
+    delete adaptedPoint['is_favorite'];
+
+    return adaptedPoint;
+  }
 }

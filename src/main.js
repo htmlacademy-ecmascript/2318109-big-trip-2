@@ -39,6 +39,7 @@ const init = () => {
   newPointBtnPresenter.init({onButtonClick: pointPresenter.newPointButtonClickHandler});
   filterPresenter.init();
   pointPresenter.init();
+  pointsModel.init();
 };
 
 init();

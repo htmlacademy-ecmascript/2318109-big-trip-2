@@ -1,7 +1,7 @@
 import NoPointView from '../view/no-point-view.js';
 import SortView from '../view/sort-view.js';
-import PointPresenter from './point-presenter.js';
 import EventListView from '../view/event-list-view.js';
+import PointPresenter from './point-presenter.js';
 import { sortByPrice, sortByTime, sortByDay } from '../utils/sort.js';
 import { SortType, UserAction, UpdateType, FilterType } from '../consts.js';
 import { render, remove, RenderPosition } from '../framework/render.js';
@@ -27,8 +27,10 @@ export default class Presenter {
     this.#pointsModel = pointsModel;
     this.#filterModel = filterModel;
 
-    this.#pointsModel.addObserver(this.#handleModelEvent);
-    this.#filterModel.addObserver(this.#handleModelEvent);
+    this.#pointsModel.addObserver(this.#modelEventHandler);
+    this.#filterModel.addObserver(this.#modelEventHandler);
+
+    // this.#newEventButtonElement.addEventListener('click', this.#addNewPointHandler);
   }
 
   get points() {
@@ -52,11 +54,11 @@ export default class Presenter {
     this.#render();
   }
 
-  #handleModeChange = () => {
+  #modeChangeHandler = () => {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
   };
 
-  #handleViewAction = (actionType, updateType, update) => {
+  #viewActionHandler = (actionType, updateType, update) => {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this.#pointsModel.updatePoint(updateType, update);
@@ -70,7 +72,7 @@ export default class Presenter {
     }
   };
 
-  #handleModelEvent = (updateType, data) => {
+  #modelEventHandler = (updateType, data) => {
     switch (updateType) {
       case UpdateType.PATCH:
         this.#pointPresenters.get(data.id).init(data);
@@ -86,7 +88,7 @@ export default class Presenter {
     }
   };
 
-  #handleSortTypeChange = (sortType) => {
+  #sortTypeChangeHandler = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
     }
@@ -98,7 +100,7 @@ export default class Presenter {
 
   #renderSort() {
     this.#sortComponent = new SortView({
-      onSortTypeChange: this.#handleSortTypeChange,
+      onSortTypeChange: this.#sortTypeChangeHandler,
       currentSortType: this.#currentSortType
     });
 
@@ -109,8 +111,8 @@ export default class Presenter {
     const pointPresenter = new PointPresenter({
       contentContainer: this.#eventListComponent.element,
       pointsModel: this.#pointsModel,
-      onDataChange: this.#handleViewAction,
-      onModeChange: this.#handleModeChange
+      onDataChange: this.#viewActionHandler,
+      onModeChange: this.#modeChangeHandler
     });
 
     pointPresenter.init(point);

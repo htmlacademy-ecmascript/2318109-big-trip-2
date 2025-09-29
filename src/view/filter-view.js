@@ -5,22 +5,24 @@ function createFilterItemTemplate (filter, currentFilterType) {
   const isDisabled = count === 0 ? 'disabled' : '';
   const isChecked = type === currentFilterType ? 'checked' : '';
 
-  return (`<div class="trip-filters__filter">
-                  <input id="filter-${type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${type}" ${isChecked} ${isDisabled}>
-                  <label class="trip-filters__filter-label" for="filter-${type}">${type}</label>
-                </div>`);
+  return (`
+    <div class="trip-filters__filter">
+      <input id="filter-${type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${type}" ${isChecked} ${isDisabled}>
+      <label class="trip-filters__filter-label" for="filter-${type}">${type}</label>
+    </div>
+  `);
 }
 
 function createFiltersTemplate(filters, currentFilterType) {
   const filterItemsTemplate = filters
     .map((filter) => createFilterItemTemplate(filter, currentFilterType))
     .join('');
-  return (
-    `<form class="trip-filters" action="#" method="get">
+  return (`
+    <form class="trip-filters" action="#" method="get">
       ${filterItemsTemplate}
       <button class="visually-hidden" type="submit">Accept filter</button>
-    </form>`
-  );
+    </form>
+  `);
 }
 
 export default class FilterView extends AbstractView {

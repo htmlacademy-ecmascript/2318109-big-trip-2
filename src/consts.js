@@ -83,6 +83,17 @@ const NoPointsMessagesType = {
   [FilterType.FUTURE]: 'There are no future events now',
 };
 
+const DEFAULT_POINT = ({
+  basePrice: '0',
+  dateFrom: null,
+  dateTo: null,
+  destination: null,
+  offers: [],
+  id: 12345,
+  type: 'flight',
+  isFavorite: false,
+});
+
 const DISABLED_SORT_TYPE = [SortType.EVENT, SortType.OFFERS];
 
-export { POINTS_COUNT, DATE_FORMAT, PointTypes, FilterType, MODE, SortType, DISABLED_SORT_TYPE, UserAction, UpdateType, NoPointsMessagesType };
+export { POINTS_COUNT, DEFAULT_POINT, DATE_FORMAT, PointTypes, FilterType, MODE, SortType, DISABLED_SORT_TYPE, UserAction, UpdateType, NoPointsMessagesType };

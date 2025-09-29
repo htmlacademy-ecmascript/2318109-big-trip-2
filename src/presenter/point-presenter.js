@@ -1,4 +1,4 @@
-import EditPointFormView from '../view/edit-point-form-view.js';
+import PointFormView from '../view/point-form-view.js';
 import PointView from '../view/point-view.js';
 import { render, replace, remove } from '../framework/render.js';
 import { MODE } from '../consts.js';
@@ -14,8 +14,8 @@ export default class PointPresenter {
 
   #point = null;
   #pointsModel = null;
-  #handleDataChange = null;
-  #handleModeChange = null;
+  #dataChangeHandler = null;
+  #modeChangeHandler = null;
 
   #pointComponent = null;
   #editPointComponent = null;
@@ -25,8 +25,8 @@ export default class PointPresenter {
   constructor({contentContainer, pointsModel, onDataChange, onModeChange }) {
     this.#contentContainer = contentContainer;
     this.#pointsModel = pointsModel;
-    this.#handleDataChange = onDataChange;
-    this.#handleModeChange = onModeChange;
+    this.#dataChangeHandler = onDataChange;
+    this.#modeChangeHandler = onModeChange;
   }
 
   init(point) {
@@ -43,17 +43,17 @@ export default class PointPresenter {
       offers: this.#offers,
       destination: this.#destination,
       onButtonClick: () => this.#replacePointToEditForm(),
-      onFavoriteClick: this.#handleFavoriteClick,
+      onFavoriteClick: this.#favoriteClickHandler,
     });
 
-    this.#editPointComponent = new EditPointFormView({
+    this.#editPointComponent = new PointFormView({
       point: this.#point,
       offers: this.#offers,
       destinations: this.#destinations,
       destination: this.#destination,
       onButtonClick: () => this.#replaceEditFormToPoint(),
       onFormSubmit: this.#formSubmitHandler,
-      onDeleteClick: this.#handleDeleteClick,
+      onDeleteClick: this.#deleteClickHandler,
       pointsModel: this.#pointsModel
     });
 
@@ -89,7 +89,7 @@ export default class PointPresenter {
   #replacePointToEditForm() {
     replace(this.#editPointComponent, this.#pointComponent);
     document.addEventListener('keydown', this.#escKeyDownHandler);
-    this.#handleModeChange();
+    this.#modeChangeHandler();
     this.#mode = MODE.EDITING;
   }
 
@@ -107,8 +107,8 @@ export default class PointPresenter {
     }
   };
 
-  #handleFavoriteClick = () => {
-    this.#handleDataChange(
+  #favoriteClickHandler = () => {
+    this.#dataChangeHandler(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,
       {...this.#point, isFavorite: !this.#point.isFavorite}
@@ -120,7 +120,7 @@ export default class PointPresenter {
       !isDatesEqual(this.#point.dateFrom, update.dateFrom) ||
       !isDatesEqual(this.#point.dateTo, update.dateTo);
 
-    this.#handleDataChange(
+    this.#dataChangeHandler(
       UserAction.UPDATE_POINT,
       isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
       update
@@ -129,8 +129,8 @@ export default class PointPresenter {
     this.#replaceEditFormToPoint();
   };
 
-  #handleDeleteClick = (point) => {
-    this.#handleDataChange(
+  #deleteClickHandler = (point) => {
+    this.#dataChangeHandler(
       UserAction.DELETE_POINT,
       UpdateType.MINOR,
       point

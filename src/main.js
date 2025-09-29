@@ -16,6 +16,7 @@ const init = () => {
   const pointsModel = new PointsModel({
     pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
   });
+
   const filterModel = new FilterModel();
 
   const newPointBtnPresenter = new NewPointBtnPresenter({

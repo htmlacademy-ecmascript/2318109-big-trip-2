@@ -95,6 +95,11 @@ export default class Presenter {
     }
   };
 
+  #renderLoading() {
+    render(this.#loadingComponent, this.#eventListComponent.element, RenderPosition.AFTERBEGIN);
+    console.log(this.#eventListComponent)
+  }
+
   #sortTypeChangeHandler = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
@@ -168,10 +173,6 @@ export default class Presenter {
     render(this.#noPointComponent, this.#eventListComponent.element);
   }
 
-  #renderLoading() {
-    render(this.#loadingComponent, this.#eventListComponent.element, RenderPosition.AFTERBEGIN);
-  }
-
   #clear({resetSortType = false} = {}) {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
@@ -200,6 +201,8 @@ export default class Presenter {
   };
 
   #render() {
+    render(this.#eventListComponent, this.#contentContainer);
+
     if (this.#isLoading) {
       this.#renderLoading();
       return;
@@ -214,7 +217,6 @@ export default class Presenter {
     }
 
     this.#renderSort();
-    render(this.#eventListComponent, this.#contentContainer);
     this.#renderPoints(points.slice(0, pointCount));
   }
 }

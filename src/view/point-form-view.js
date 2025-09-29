@@ -298,6 +298,30 @@ export default class PointFormView extends AbstractStatefulView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
+
+    const destinationInput = this.element.querySelector('.event__input--destination');
+    const priceInput = this.element.querySelector('.event__input--price');
+    const startTimeInput = this.element.querySelector('#event-start-time-1');
+    const endTimeInput = this.element.querySelector('#event-end-time-1');
+
+    const datalistOptions = Array.from(this.element.querySelector('#destination-list-1').options);
+    const isValidDestination = datalistOptions.some((option) => option.value === destinationInput.value);
+
+    const hasValidDates = startTimeInput.value && endTimeInput.value;
+
+    const price = parseInt(priceInput.value, 10);
+    const isValidPrice = !isNaN(price) && price > 0;
+
+    if (!isValidDestination || !hasValidDates || !isValidPrice) {
+      this._setState({
+        ...this._state,
+        dateFrom: startTimeInput.value ? this._state.dateFrom : null,
+        dateTo: endTimeInput.value ? this._state.dateTo : null,
+        basePrice: priceInput.value ? parseInt(priceInput.value, 10) : 0
+      });
+      return;
+    }
+
     this.#onFormSubmit(PointFormView.parseStateToPoint(this._state));
   };
 

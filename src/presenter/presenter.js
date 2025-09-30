@@ -97,7 +97,6 @@ export default class Presenter {
 
   #renderLoading() {
     render(this.#loadingComponent, this.#eventListComponent.element, RenderPosition.AFTERBEGIN);
-    console.log(this.#eventListComponent)
   }
 
   #sortTypeChangeHandler = (sortType) => {

@@ -7,7 +7,13 @@ import NewPointPresenter from './new-point-presenter.js';
 import { sortByPrice, sortByTime, sortByDay } from '../utils/sort.js';
 import { SortType, UserAction, UpdateType, FilterType } from '../consts.js';
 import { render, remove, RenderPosition } from '../framework/render.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import { filter } from '../utils/filter.js';
+
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
 
 export default class Presenter {
   #contentContainer = null;
@@ -28,6 +34,11 @@ export default class Presenter {
   #filterType = FilterType.EVERYTHING;
   #isCreating = false;
   #isLoading = true;
+
+  #uiBlocker = new UiBlocker({
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT
+  });
 
   constructor({contentContainer, pointsModel, filterModel, newPointBtnPresenter}) {
     this.#contentContainer = contentContainer;
@@ -61,6 +72,8 @@ export default class Presenter {
   }
 
   #viewActionHandler = async (actionType, updateType, update) => {
+    this.#uiBlocker.block();
+
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this.#pointPresenters.get(update.id).setSaving();
@@ -87,6 +100,8 @@ export default class Presenter {
         }
         break;
     }
+
+    this.#uiBlocker.unblock();
   };
 
   #modelEventHandler = (updateType, data) => {

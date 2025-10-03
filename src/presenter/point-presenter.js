@@ -8,12 +8,14 @@ import { isDatesEqual} from '../utils/common.js';
 export default class PointPresenter {
   #offers = [];
   #destinations = [];
-  #destination = [];
+  #destination = null;
+  #offersByType = [];
+  #point = null;
 
   #contentContainer = null;
 
-  #point = null;
   #pointsModel = null;
+
   #dataChangeHandler = null;
   #modeChangeHandler = null;
 
@@ -31,7 +33,8 @@ export default class PointPresenter {
 
   init(point) {
     this.#point = point;
-    this.#offers = this.#pointsModel.getOffersByType(this.#point.type);
+    this.#offers = [...this.#pointsModel.offers];
+    this.#offersByType = this.#pointsModel.getOffersByType(this.#point.type);
     this.#destinations = [...this.#pointsModel.destinations];
     this.#destination = this.#pointsModel.getDestinationById(this.#point.destination);
 
@@ -40,7 +43,7 @@ export default class PointPresenter {
 
     this.#pointComponent = new PointView({
       point: this.#point,
-      offers: this.#offers,
+      offersByType: this.#offersByType,
       destination: this.#destination,
       onButtonClick: this.#buttonClickHandler,
       onFavoriteClick: this.#favoriteClickHandler,
@@ -49,12 +52,12 @@ export default class PointPresenter {
     this.#editPointComponent = new PointFormView({
       point: this.#point,
       offers: this.#offers,
+      offersByType: this.#offersByType,
       destinations: this.#destinations,
       destination: this.#destination,
       onButtonClick: this.#buttonClickHandler,
       onFormSubmit: this.#formSubmitHandler,
-      onDeleteClick: this.#deleteClickHandler,
-      pointsModel: this.#pointsModel
+      onDeleteClick: this.#deleteClickHandler
     });
 
     if (prevPointComponent === null || prevEditPointComponent === null) {

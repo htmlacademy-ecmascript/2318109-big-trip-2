@@ -27,12 +27,12 @@ export default class NewPointPresenter {
 
     this.#addPointComponent = new PointFormView({
       point: DEFAULT_POINT,
-      offers: this.#pointsModel.getOffersByType('flight'),
+      offers: [...this.#pointsModel.offers],
+      offersByType: this.#pointsModel.getOffersByType('flight'),
       destinations: [...this.#pointsModel.destinations],
       onCancelClick: this.#cancelClickHandler,
       onFormSubmit: this.#formSubmitHandler,
       type: EditType.CREATING,
-      pointsModel: this.#pointsModel
     });
 
     render(this.#addPointComponent, this.#eventListContainer, RenderPosition.AFTERBEGIN);

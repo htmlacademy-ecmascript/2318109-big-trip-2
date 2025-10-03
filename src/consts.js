@@ -93,7 +93,6 @@ const DEFAULT_POINT = ({
   dateTo: null,
   destination: null,
   offers: [],
-  id: 12345,
   type: 'flight',
   isFavorite: false,
 });

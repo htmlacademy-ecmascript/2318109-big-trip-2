@@ -17,11 +17,11 @@ const getDurationDate = (dateFrom, dateTo) => {
   const pad2 = (num) => String(num).padStart(2, '0');
 
   if (days >= 1) {
-    return `${days}D ${(hours ? `${pad2(hours)}H` : '')} ${ minutes ? ` ${pad2(minutes)}M` : ''}`;
+    return `${pad2(days)}D ${(hours ? `${pad2(hours)}H` : '00H')} ${minutes ? `${pad2(minutes)}M` : '00M'}`;
   } else if (totalHours >= 1) {
     return `${pad2(totalHours)}H ${minutes ? `${pad2(minutes)}M` : '00M'}`;
   } else {
-    return `${totalMinutes}M`;
+    return `${pad2(totalMinutes)}M`;
   }
 };
 

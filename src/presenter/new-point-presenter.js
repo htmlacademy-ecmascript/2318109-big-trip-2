@@ -40,14 +40,14 @@ export default class NewPointPresenter {
     document.addEventListener('keydown', this.#escKeyDownHandler);
   }
 
-  destroy({isCanceled = true} = {}) {
+  destroy() {
     if (!this.#addPointComponent) {
       return;
     }
 
-    this.#handleDestroy({isCanceled});
     remove(this.#addPointComponent);
     this.#addPointComponent = null;
+    this.#handleDestroy();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
@@ -64,8 +64,6 @@ export default class NewPointPresenter {
       UpdateType.MINOR,
       point
     );
-
-    this.destroy();
   };
 
   #cancelClickHandler = () => {

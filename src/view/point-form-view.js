@@ -56,12 +56,8 @@ function createEditPointFormTemplate (state, offersByType, destinations, destina
                 ${createBtnsTemplate(isCreating, isDisabled, isDeleting)}
               </header>
                 <section class="event__details">
-                  <section class="event__section  event__section--offers">
-                      ${createOffersTemplate(offers, offersByType)}
-                  </section>
-                  <section class="event__section  event__section--destination">
-                    ${createDestinationTemplate(destination)}
-                  </section>
+                  ${createOffersTemplate(offers, offersByType)}
+                  ${createDestinationTemplate(destination)}
                 </section>
               </form>
             </li>
@@ -73,7 +69,7 @@ function createBtnsTemplate (isCreating, isDisabled, isDeleting) {
     return '<button class="event__reset-btn" type="reset">Cancel</button>';
   }
 
-  return `<button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting' : 'Delete'}</button>
+  return `<button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
     <button class="event__rollup-btn" type="button">
       <span class="visually-hidden">Open event</span>
     </button>
@@ -109,6 +105,7 @@ function createDestinationTemplate (destination) {
 
   return (`
     ${destination.description ? `
+    <section class="event__section  event__section--destination">
     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
       <p class="event__destination-description">${destination.description}</p>` : ''}
         ${destination.pictures?.length ? `
@@ -118,14 +115,15 @@ function createDestinationTemplate (destination) {
       `<img class="event__photo" src="${src}" alt="${description}">`
     ).join('')}
         </div>
-      </div>` : ''}
+      </div>
+    </section>` : ''}
   `);
 }
 
 function createOffersTemplate (selectedOffers, offersByType) {
-
   return (`
-    ${offersByType ? `
+    ${offersByType.length ? `
+    <section class="event__section  event__section--offers">
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
       <div class="event__available-offers">
         ${offersByType.map(({id, title, price}) => {
@@ -139,7 +137,8 @@ function createOffersTemplate (selectedOffers, offersByType) {
           </label>
         </div>`;
     }).join('')}
-      </div>` : ''}
+      </div>
+    </section>` : ''}
   `);
 }
 

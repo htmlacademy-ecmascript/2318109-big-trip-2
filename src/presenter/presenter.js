@@ -3,6 +3,7 @@ import SortView from '../view/sort-view.js';
 import EventListView from '../view/event-list-view.js';
 import PointPresenter from './point-presenter.js';
 import LoadingView from '../view/loading-view.js';
+import FailedLoadView from '../view/failed-load-view.js';
 import NewPointPresenter from './new-point-presenter.js';
 import { sortByPrice, sortByTime, sortByDay } from '../utils/sort.js';
 import { SortType, UserAction, UpdateType, FilterType } from '../consts.js';
@@ -21,6 +22,7 @@ export default class Presenter {
   #filterModel = null;
   #pointsModel = null;
 
+  #failedLoadComponent = new FailedLoadView();
   #loadingComponent = new LoadingView();
   #eventListComponent = new EventListView();
   #noPointComponent = null;
@@ -122,11 +124,21 @@ export default class Presenter {
         remove(this.#loadingComponent);
         this.#render();
         break;
+      case UpdateType.ERROR:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#clear();
+        this.#renderError();
+        break;
     }
   };
 
   #renderLoading() {
     render(this.#loadingComponent, this.#eventListComponent.element, RenderPosition.AFTERBEGIN);
+  }
+
+  #renderError() {
+    render(this.#failedLoadComponent, this.#eventListComponent.element, RenderPosition.AFTERBEGIN);
   }
 
   #sortTypeChangeHandler = (sortType) => {
@@ -145,7 +157,7 @@ export default class Presenter {
       currentSortType: this.#currentSortType
     });
 
-    render(this.#sortComponent, this.#eventListComponent.element, RenderPosition.AFTERBEGIN);
+    render(this.#sortComponent, this.#contentContainer, RenderPosition.AFTERBEGIN);
   }
 
   #renderNewPointPresenter() {
@@ -168,10 +180,10 @@ export default class Presenter {
     this.#renderNewPointPresenter();
   };
 
-  #newPointDestroyHandler = ({isCanceled}) => {
+  #newPointDestroyHandler = () => {
     this.#isCreating = false;
     this.#newPointBtnPresenter.enableButton();
-    if (this.points.length === 0 && isCanceled) {
+    if (this.points.length === 0) {
       this.#clear();
       this.#render();
     }

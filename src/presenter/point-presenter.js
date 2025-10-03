@@ -166,4 +166,21 @@ export default class PointPresenter {
       point
     );
   };
+
+  setAborting() {
+    if (this.#mode === MODE.DEFAULT) {
+      this.#pointComponent.shake();
+      return;
+    }
+
+    const resetFormState = () => {
+      this.#editPointComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#editPointComponent.shake(resetFormState);
+  }
 }

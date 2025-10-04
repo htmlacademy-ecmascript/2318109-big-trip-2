@@ -2,20 +2,16 @@ import dayjs from 'dayjs';
 
 const getPointDuration = (point) => dayjs(point.dateTo).diff(dayjs(point.dateFrom));
 
-function sortByTime (pointA, pointB) {
+const sortByTime = (pointA, pointB) => {
   const pointDurationA = getPointDuration(pointA);
   const pointDurationB = getPointDuration(pointB);
 
   return pointDurationB - pointDurationA;
-}
+};
 
-function sortByPrice(pointA, pointB) {
-  return pointB.basePrice - pointA.basePrice;
-}
+const sortByPrice = (pointA, pointB) => pointB.basePrice - pointA.basePrice;
 
-function sortByDay(pointA, pointB) {
-  return pointA.dateFrom - pointB.dateFrom;
-}
+const sortByDay = (pointA, pointB) => dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
 
 
 export { sortByPrice, sortByTime, sortByDay };

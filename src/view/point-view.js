@@ -2,9 +2,8 @@ import { DATE_FORMAT } from '../consts.js';
 import AbstractView from '../framework/view/abstract-view.js';
 import { getDurationDate, humanizePointDueDate } from '../utils/date-format.js';
 
-function createPointTemplate (point, offersByType, destination) {
+function createPointTemplate (point, checkedOffers, destination) {
   const {basePrice, dateFrom, dateTo, isFavorite, type} = point;
-  const selectedOffers = offersByType.filter((offer) => point.offers.includes(offer.id));
 
   return (`
     <li class="trip-events__item">
@@ -26,7 +25,7 @@ function createPointTemplate (point, offersByType, destination) {
           &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
         </p>
         <h4 class="visually-hidden">Offers:</h4>
-          ${createOffersTemplate(selectedOffers)}
+          ${createOffersTemplate(checkedOffers)}
         <button class="event__favorite-btn ${isFavorite ? 'event__favorite-btn--active' : '' }" type="button">
           <span class="visually-hidden">Add to favorite</span>
           <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -41,15 +40,16 @@ function createPointTemplate (point, offersByType, destination) {
   `);
 }
 
-function createOffersTemplate (selectedOffers) {
+function createOffersTemplate (offers) {
+  const checkedOffers = offers.filter((offer) => offer.isChecked);
   return (`
-    ${selectedOffers.length !== 0 ? `
+    ${checkedOffers.length !== 0 ? `
       <ul class="event__selected-offers">
-      ${selectedOffers.map((selectedOffer) => (
+      ${checkedOffers.map((offer) => (
       `<li class="event__offer">
-          <span class="event__offer-title">${selectedOffer.title}</span>
+          <span class="event__offer-title">${offer.title}</span>
           &plus;&euro;&nbsp;
-          <span class="event__offer-price">${selectedOffer.price}</span>
+          <span class="event__offer-price">${offer.price}</span>
         </li>`)
     ).join('')}
       </ul>`
@@ -60,14 +60,15 @@ function createOffersTemplate (selectedOffers) {
 export default class PointView extends AbstractView {
   #point = null;
   #destination = null;
-  #offersByType = null;
+
+  #checkedOffers = null;
   #onButtonClick = null;
   #handleFavoriteClick = null;
 
-  constructor ({point, offersByType, destination, onButtonClick, onFavoriteClick}) {
+  constructor ({point, checkedOffers, destination, onButtonClick, onFavoriteClick}) {
     super();
     this.#point = point;
-    this.#offersByType = offersByType;
+    this.#checkedOffers = checkedOffers;
     this.#destination = destination;
     this.#onButtonClick = onButtonClick;
     this.#handleFavoriteClick = onFavoriteClick;
@@ -77,7 +78,7 @@ export default class PointView extends AbstractView {
   }
 
   get template() {
-    return createPointTemplate(this.#point, this.#offersByType, this.#destination);
+    return createPointTemplate(this.#point, this.#checkedOffers, this.#destination);
   }
 
   #buttonClickHandler = (evt) => {

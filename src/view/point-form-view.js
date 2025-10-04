@@ -5,8 +5,8 @@ import he from 'he';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
-function createEditPointFormTemplate (state, offersByType, destinations, destination, formType) {
-  const { dateFrom, dateTo, offers, type, basePrice, isDisabled, isSaving, isDeleting } = state;
+function createEditPointFormTemplate (state, destinations, destination, formType) {
+  const { dateFrom, dateTo, type, offers, basePrice, isDisabled, isSaving, isDeleting } = state;
   const isCreating = formType === EditType.CREATING;
 
   return (`
@@ -56,7 +56,7 @@ function createEditPointFormTemplate (state, offersByType, destinations, destina
                 ${createBtnsTemplate(isCreating, isDisabled, isDeleting)}
               </header>
                 <section class="event__details">
-                  ${createOffersTemplate(offers, offersByType)}
+                  ${createOffersTemplate(offers)}
                   ${createDestinationTemplate(destination)}
                 </section>
               </form>
@@ -120,23 +120,22 @@ function createDestinationTemplate (destination) {
   `);
 }
 
-function createOffersTemplate (selectedOffers, offersByType) {
+function createOffersTemplate (offers) {
   return (`
-    ${offersByType.length ? `
+    ${offers.length ? `
     <section class="event__section  event__section--offers">
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
       <div class="event__available-offers">
-        ${offersByType.map(({id, title, price}) => {
-      const isChecked = selectedOffers.includes(id) ? 'checked' : '';
-      return `<div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}" type="checkbox" name="${title}" data-offer-id=${id} ${isChecked}}>
+        ${offers.map(({id, title, price, isChecked}) =>
+      `<div class="event__offer-selector">
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}" type="checkbox" name="${title}" ${isChecked ? 'checked' : ''}>
           <label class="event__offer-label" for="event-offer-${id}">
             <span class="event__offer-title">${title}</span>
             &plus;&euro;&nbsp;
             <span class="event__offer-price">${price}</span>
           </label>
-        </div>`;
-    }).join('')}
+        </div>`
+    ).join('')}
       </div>
     </section>` : ''}
   `);
@@ -148,18 +147,18 @@ export default class PointFormView extends AbstractStatefulView {
   #destinations = null;
   #destination = null;
   #offers = null;
-  #offersByType = null;
+  #pointsModel;
   #onButtonClick = null;
   #onFormSubmit = null;
   #handleDeleteClick = null;
   #handleCancelClick = null;
   #editType = EditType.EDITING;
 
-  constructor ({point, offers, offersByType, destinations, destination, onButtonClick, onCancelClick, onFormSubmit, onDeleteClick, type = EditType.EDITING}) {
+  constructor ({point, offers, pointsModel, destinations, destination, onButtonClick, onCancelClick, onFormSubmit, onDeleteClick, type = EditType.EDITING}) {
     super();
-    this._setState(PointFormView.parsePointToState(point));
+    this.#pointsModel = pointsModel;
+    this._setState(this.#parsePointToState(point));
     this.#offers = offers;
-    this.#offersByType = offersByType;
     this.#destinations = destinations;
     this.#destination = destination;
     this.#onButtonClick = onButtonClick;
@@ -172,7 +171,7 @@ export default class PointFormView extends AbstractStatefulView {
   }
 
   get template() {
-    return createEditPointFormTemplate(this._state, this.#offersByType, this.#destinations, this.#destination, this.#editType);
+    return createEditPointFormTemplate(this._state, this.#destinations, this.#destination, this.#editType);
   }
 
   removeElement() {
@@ -190,7 +189,7 @@ export default class PointFormView extends AbstractStatefulView {
   }
 
   reset(point) {
-    this.updateElement(PointFormView.parsePointToState(point));
+    this.updateElement(this.#parsePointToState(point));
   }
 
   _restoreHandlers () {
@@ -198,7 +197,7 @@ export default class PointFormView extends AbstractStatefulView {
     this.element.querySelector('.event__type-group').addEventListener('change', this.#changeTypeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationInputHandler);
     this.element.querySelector('.event--edit').addEventListener('submit', this.#formSubmitHandler);
-    this.element.querySelector('.event__available-offers')?.addEventListener('change', this.#offerChangeHandler);
+    this.element.querySelector('.event__available-offers')?.addEventListener('click', this.#offerChangeHandler);
 
     if(this.#editType === EditType.EDITING) {
       this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#buttonClickHandler);
@@ -208,7 +207,6 @@ export default class PointFormView extends AbstractStatefulView {
     if(this.#editType === EditType.CREATING) {
       this.element.querySelector('.event__reset-btn').addEventListener('click', this.#cancelBtnClickHandler);
     }
-
 
     this.#setDatepickers();
   }
@@ -260,33 +258,54 @@ export default class PointFormView extends AbstractStatefulView {
     });
   };
 
-  #offerChangeHandler = () => {
-    const checkedOffers = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
-    const selectedOffers = checkedOffers.map((checkedOffer) => checkedOffer.dataset.offerId);
 
-    this._setState({
-      offers: selectedOffers
+  // const checkedOffers = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
+  // const selectedOffers = checkedOffers.map((checkedOffer) => checkedOffer.dataset.offerId);
+
+
+  #offerChangeHandler = (evt) => {
+    evt.preventDefault();
+
+    if (!evt.target.className === 'event__offer-selector') {
+      return;
+    }
+
+    const inputElementId = evt.target.closest('.event__offer-selector')
+      .firstElementChild.id
+      .replace('event-offer-', '');
+
+    const offers = this._state.offers.map((offer) => {
+      if (offer.id === inputElementId) {
+        return { ...offer, isChecked: !offer.isChecked };
+      }
+
+      return offer;
+    });
+
+    this.updateElement({
+      ...this._state,
+      offers,
     });
   };
 
   #changeTypeHandler = (evt) => {
+    evt.preventDefault();
     if (!evt.target.className === 'event__type-item') {
       return;
     }
 
     const selectedType = evt.target.value;
-    const newOffersByType = this.#offers.find((offer) => offer.type === selectedType).offers;
-
-    this._setState({
-      ...this._state,
-      type: selectedType,
-      offers: []
-    });
-
-    this.#offersByType = newOffersByType;
+    const offers = this.#offers.find((offer) => offer.type === selectedType)
+      .offers
+      .map((offer) => ({
+        ...offer,
+        isChecked: false
+      }));
 
     this.updateElement({
+      ...this._state,
       type: selectedType,
+      offers
     });
   };
 
@@ -324,7 +343,7 @@ export default class PointFormView extends AbstractStatefulView {
 
   #formDeleteClickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleDeleteClick(PointFormView.parseStateToPoint(this._state));
+    this.#handleDeleteClick(this.#parseStateToPoint(this._state));
   };
 
   #formSubmitHandler = (evt) => {
@@ -355,20 +374,25 @@ export default class PointFormView extends AbstractStatefulView {
       return;
     }
 
-    this.#onFormSubmit(PointFormView.parseStateToPoint(this._state));
+    this.#onFormSubmit(this.#parseStateToPoint(this._state));
   };
 
-  static parsePointToState(point) {
+  #parsePointToState(point) {
     return {
       ...point,
+      offers: this.#pointsModel.getCheckedOffers(point),
       isDisabled: false,
       isSaving: false,
       isDeleting: false
     };
   }
 
-  static parseStateToPoint(state) {
-    const point = { ...state };
+  #parseStateToPoint(state) {
+    const point = {
+      ...state,
+      offers: state.offers.filter((offer) => offer.isChecked).map((offer) => offer.id)
+    };
+
     delete point.isDisabled;
     delete point.isSaving;
     delete point.isDeleting;

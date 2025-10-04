@@ -29,6 +29,7 @@ export default class NewPointPresenter {
       point: DEFAULT_POINT,
       offers: [...this.#pointsModel.offers],
       offersByType: this.#pointsModel.getOffersByType('flight'),
+      pointsModel: this.#pointsModel,
       destinations: [...this.#pointsModel.destinations],
       onCancelClick: this.#cancelClickHandler,
       onFormSubmit: this.#formSubmitHandler,

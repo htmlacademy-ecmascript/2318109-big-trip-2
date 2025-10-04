@@ -9,7 +9,7 @@ export default class PointPresenter {
   #offers = [];
   #destinations = [];
   #destination = null;
-  #offersByType = [];
+  #checkedOffers = [];
   #point = null;
 
   #contentContainer = null;
@@ -34,7 +34,7 @@ export default class PointPresenter {
   init(point) {
     this.#point = point;
     this.#offers = [...this.#pointsModel.offers];
-    this.#offersByType = this.#pointsModel.getOffersByType(this.#point.type);
+    this.#checkedOffers = this.#pointsModel.getCheckedOffers(this.#point);
     this.#destinations = [...this.#pointsModel.destinations];
     this.#destination = this.#pointsModel.getDestinationById(this.#point.destination);
 
@@ -43,7 +43,7 @@ export default class PointPresenter {
 
     this.#pointComponent = new PointView({
       point: this.#point,
-      offersByType: this.#offersByType,
+      checkedOffers: this.#checkedOffers,
       destination: this.#destination,
       onButtonClick: this.#buttonClickHandler,
       onFavoriteClick: this.#favoriteClickHandler,
@@ -52,7 +52,7 @@ export default class PointPresenter {
     this.#editPointComponent = new PointFormView({
       point: this.#point,
       offers: this.#offers,
-      offersByType: this.#offersByType,
+      pointsModel: this.#pointsModel,
       destinations: this.#destinations,
       destination: this.#destination,
       onButtonClick: this.#buttonClickHandler,

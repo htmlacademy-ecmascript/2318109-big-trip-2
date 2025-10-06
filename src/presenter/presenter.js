@@ -18,7 +18,6 @@ const TimeLimit = {
 
 export default class Presenter {
   #contentContainer = null;
-  #tripMainContainer = null;
 
   #filterModel = null;
   #pointsModel = null;
@@ -43,9 +42,8 @@ export default class Presenter {
     upperLimit: TimeLimit.UPPER_LIMIT
   });
 
-  constructor({contentContainer, tripMainContainer, pointsModel, filterModel, newPointBtnPresenter}) {
+  constructor({contentContainer, pointsModel, filterModel, newPointBtnPresenter}) {
     this.#contentContainer = contentContainer;
-    this.#tripMainContainer = tripMainContainer;
     this.#pointsModel = pointsModel;
     this.#filterModel = filterModel;
     this.#newPointBtnPresenter = newPointBtnPresenter;

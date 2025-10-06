@@ -1,10 +1,10 @@
 import { DATE_FORMAT, EVENT_TYPES } from '../consts.js';
 import { humanizePointDueDate } from '../utils.js';
-import { createElement } from '../render';
+import AbstractView from '../framework/view/abstract-view.js';
 
-function createAddPointFormTemplate (point, offer, destinations) {
+function createAddPointFormTemplate (point, offers, destinations) {
   const { dateFrom, dateTo, type, id} = point;
-  const offersType = offer.find((item) => item.type === point.type).offers;
+  const offersType = offers.find((item) => item.type === point.type).offers;
   const pointOffers = offersType.filter((offerType) => point.offers.includes(offerType.id));
   const pointDestination = destinations.find((item) => item.id === point.destination);
   return (`<li class="trip-events__item">
@@ -99,26 +99,19 @@ function createAddPointFormTemplate (point, offer, destinations) {
               </li>`);
 }
 
-export default class AddPointFormView {
-  constructor ({point, offer, destinations}) {
-    this.point = point;
-    this.offer = offer;
-    this.destinations = destinations;
+export default class AddPointFormView extends AbstractView{
+  #point = null;
+  #destinations = null;
+  #offers = null;
+
+  constructor ({point, offers, destinations}) {
+    super();
+    this.#point = point;
+    this.#offers = offers;
+    this.#destinations = destinations;
   }
 
-  getTemplate() {
-    return createAddPointFormTemplate(this.point, this.offer, this.destinations);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+  get template() {
+    return createAddPointFormTemplate(this.#point, this.#offers, this.#destinations);
   }
 }

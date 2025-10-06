@@ -1,10 +1,10 @@
 import { DATE_FORMAT, EVENT_TYPES } from '../consts.js';
-import { createElement } from '../render';
+import AbstractView from '../framework/view/abstract-view.js';
 import { humanizePointDueDate } from '../utils.js';
 
-function createEditPointFormTemplate (point, offer, destinations) {
+function createEditPointFormTemplate (point, offers, destinations) {
   const {basePrice, dateFrom, dateTo, type, id} = point;
-  const offersType = offer.find((item) => item.type === point.type).offers;
+  const offersType = offers.find((item) => item.type === point.type).offers;
   const pointOffers = offersType.filter((offerType) => point.offers.includes(offerType.id));
   const pointDestination = destinations.find((item) => item.id === point.destination);
   return (`<li class="trip-events__item">
@@ -90,26 +90,28 @@ function createEditPointFormTemplate (point, offer, destinations) {
             </li>`);
 }
 
-export default class EditPointFormView {
-  constructor ({point, offer, destinations}) {
-    this.point = point;
-    this.offer = offer;
-    this.destinations = destinations;
+export default class EditPointFormView extends AbstractView {
+  #point = null;
+  #destinations = null;
+  #offers = null;
+  #onButtonClick = null;
+
+  constructor ({point, offers, destinations, onButtonClick}) {
+    super();
+    this.#point = point;
+    this.#offers = offers;
+    this.#destinations = destinations;
+    this.#onButtonClick = onButtonClick;
+
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#buttonClickHandler);
   }
 
-  getTemplate() {
-    return createEditPointFormTemplate(this.point, this.offer, this.destinations);
+  get template() {
+    return createEditPointFormTemplate(this.#point, this.#offers, this.#destinations);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+  #buttonClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onButtonClick();
+  };
 }

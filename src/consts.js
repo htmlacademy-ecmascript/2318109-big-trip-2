@@ -1,4 +1,4 @@
-const POINTS_COUNT = 3;
+const POINTS_COUNT = 0;
 
 const DATE_FORMAT = {
   DATE: 'YYYY-MM-DD',

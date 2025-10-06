@@ -1,5 +1,6 @@
 import FilterPresenter from './presenter/filter-presenter.js';
 import NewPointBtnPresenter from './presenter/new-point-btn-presenter.js';
+import HeaderPresenter from './presenter/header-presenter.js';
 import Presenter from './presenter/presenter.js';
 import PointsModel from './model/model.js';
 import FilterModel from './model/filter-model.js';
@@ -29,6 +30,11 @@ const init = () => {
     pointsModel
   });
 
+  const headerPresenter = new HeaderPresenter({
+    tripMainContainer,
+    pointsModel
+  });
+
   const pointPresenter = new Presenter({
     contentContainer: contentContainer,
     tripMainContainer: tripMainContainer,
@@ -39,6 +45,8 @@ const init = () => {
 
   filterPresenter.init();
   pointPresenter.init();
+  headerPresenter.init();
+
   pointsModel.init()
     .finally(() => {
       newPointBtnPresenter.init({onButtonClick: pointPresenter.newPointButtonClickHandler});

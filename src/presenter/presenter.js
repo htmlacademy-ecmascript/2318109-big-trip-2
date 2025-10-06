@@ -220,6 +220,7 @@ export default class Presenter {
 
     remove(this.#sortComponent);
     remove(this.#loadingComponent);
+    remove(this.#failedLoadComponent);
 
     if (this.#noPointComponent) {
       remove(this.#noPointComponent);

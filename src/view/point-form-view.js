@@ -1,4 +1,4 @@
-import { DATE_FORMAT, PointTypes, EditType } from '../consts.js';
+import { DayFormat, PointTypes, EditType } from '../consts.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { humanizePointDueDate } from '../utils/date-format.js';
 import he from 'he';
@@ -38,10 +38,10 @@ function createEditPointFormTemplate (state, destinations, destination, formType
 
                 <div class="event__field-group  event__field-group--time">
                   <label class="visually-hidden" for="event-start-time-1">From</label>
-                  <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${humanizePointDueDate(dateFrom, DATE_FORMAT.DATETIME)}">
+                  <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${humanizePointDueDate(dateFrom, DayFormat.DATETIME)}">
                   &mdash;
                   <label class="visually-hidden" for="event-end-time-1">To</label>
-                  <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${humanizePointDueDate(dateTo, DATE_FORMAT.DATETIME)}">
+                  <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${humanizePointDueDate(dateTo, DayFormat.DATETIME)}">
                 </div>
 
                 <div class="event__field-group  event__field-group--price">
@@ -257,11 +257,6 @@ export default class PointFormView extends AbstractStatefulView {
       basePrice: parseInt(evt.target.value, 10) || 0
     });
   };
-
-
-  // const checkedOffers = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
-  // const selectedOffers = checkedOffers.map((checkedOffer) => checkedOffer.dataset.offerId);
-
 
   #offerChangeHandler = (evt) => {
     evt.preventDefault();

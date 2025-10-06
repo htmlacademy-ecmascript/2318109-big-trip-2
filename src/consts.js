@@ -3,12 +3,13 @@ const MODE = {
   EDITING: 'EDITING',
 };
 
-const DATE_FORMAT = {
+const DayFormat = {
   DATE: 'YYYY-MM-DD',
   FULL_DATETIME: 'YYYY-MM-DDTHH:mm',
   TIME: 'HH:mm',
   MONTHDAY: 'MMM D',
-  DATETIME: 'DD/MM/YY HH:mm'
+  DATETIME: 'DD/MM/YY HH:mm',
+  TRIP: 'D MMM'
 };
 
 const PointTypes = [
@@ -98,6 +99,10 @@ const DEFAULT_POINT = ({
   isFavorite: false,
 });
 
+const DISPLAYED_DESTINATION_COUNT = 3;
+
+const DEFAULT_PRICE = 0;
+
 const DISABLED_SORT_TYPE = [SortType.EVENT, SortType.OFFERS];
 
-export { DEFAULT_POINT, DATE_FORMAT, PointTypes, EditType, FilterType, MODE, SortType, DISABLED_SORT_TYPE, UserAction, UpdateType, NoPointsMessagesType };
+export { DISPLAYED_DESTINATION_COUNT, DEFAULT_PRICE, DEFAULT_POINT, DayFormat, PointTypes, EditType, FilterType, MODE, SortType, DISABLED_SORT_TYPE, UserAction, UpdateType, NoPointsMessagesType };

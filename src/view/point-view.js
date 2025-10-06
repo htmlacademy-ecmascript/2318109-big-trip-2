@@ -1,4 +1,4 @@
-import { DATE_FORMAT } from '../consts.js';
+import { DayFormat } from '../consts.js';
 import AbstractView from '../framework/view/abstract-view.js';
 import { getDurationDate, humanizePointDueDate } from '../utils/date-format.js';
 
@@ -8,16 +8,16 @@ function createPointTemplate (point, checkedOffers, destination) {
   return (`
     <li class="trip-events__item">
       <div class="event">
-        <time class="event__date" datetime="${humanizePointDueDate(dateFrom, DATE_FORMAT.DATE)}">${humanizePointDueDate(dateFrom, DATE_FORMAT.MONTHDAY)}</time>
+        <time class="event__date" datetime="${humanizePointDueDate(dateFrom, DayFormat.DATE)}">${humanizePointDueDate(dateFrom, DayFormat.MONTHDAY)}</time>
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
         </div>
         <h3 class="event__title">${type} ${destination.name}</h3>
         <div class="event__schedule">
           <p class="event__time">
-            <time class="event__start-time" datetime="${humanizePointDueDate(dateFrom, DATE_FORMAT.FULL_DATETIME)}">${humanizePointDueDate(dateFrom, DATE_FORMAT.TIME)}</time>
+            <time class="event__start-time" datetime="${humanizePointDueDate(dateFrom, DayFormat.FULL_DATETIME)}">${humanizePointDueDate(dateFrom, DayFormat.TIME)}</time>
             &mdash;
-            <time class="event__end-time" datetime="${humanizePointDueDate(dateTo, DATE_FORMAT.FULL_DATETIME)}">${humanizePointDueDate(dateTo, DATE_FORMAT.TIME)}</time>
+            <time class="event__end-time" datetime="${humanizePointDueDate(dateTo, DayFormat.FULL_DATETIME)}">${humanizePointDueDate(dateTo, DayFormat.TIME)}</time>
           </p>
           <p class="event__duration">${getDurationDate(dateFrom, dateTo)}</p>
         </div>
